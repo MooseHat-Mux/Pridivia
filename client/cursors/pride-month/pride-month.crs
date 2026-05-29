@@ -1,0 +1,51 @@
+﻿[Arrow]
+Path=gay Normal Select.cur
+
+[Help]
+Path=gay Help Select.cur
+
+[AppStarting]
+Path=gay Working in Background 1.ani
+
+[Wait]
+Path=gay Busy 1.ani
+
+[Crosshair]
+Path=gay Precision Select.cur
+
+[IBeam]
+Path=gay Text Select.cur
+
+[NWPen]
+Path=gay Handwriting.cur
+
+[No]
+Path=gay Unavailable.cur
+
+[SizeNS]
+Path=gay Vertical Resize.cur
+
+[SizeWE]
+Path=gay Horizontal Resize.cur
+
+[SizeNWSE]
+Path=gay Diagonal Resize 1.cur
+
+[SizeNESW]
+Path=gay Diagonal Resize 2.cur
+
+[SizeAll]
+Path=gay Move.cur
+
+[UpArrow]
+Path=gay Alternate Select.cur
+
+[Hand]
+Path=gay Link Select.cur
+
+[Pin]
+Path=gay pin001.cur
+
+[Person]
+Path=gay person001.cur
+
