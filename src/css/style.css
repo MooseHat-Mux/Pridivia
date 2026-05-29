@@ -76,11 +76,11 @@ h1{
 }
 
 .trivia-container button{
-    cursor: url('./cursors/pride-month/gay\ Normal\ Select.cur'), auto;
+    cursor: url('../../public/cursors/pride-month/gay\ Normal\ Select.cur'), auto;
 }
 
 .trivia-board button{
-    cursor: url('./cursors/pride-month/gay\ Normal\ Select.cur'), auto;
+    cursor: url('../../public/cursors/pride-month/gay\ Normal\ Select.cur'), auto;
 }
 
 .option:before {
@@ -225,7 +225,7 @@ h1{
     align-items: start;
     color: #000;
     width: 100%;
-    background-image: linear-gradient(30deg, #ff00007c, #ff730070), url(./backgroundImages/gods_man_42.png);
+    background-image: linear-gradient(30deg, #ff00007c, #ff730070), url(../../public/backgroundImages/gods_man_42.png);
     background-size: 100% 100%;
 }
 
@@ -243,7 +243,7 @@ h1{
     align-items: start;
     color: #000;
     width: 100%;
-    background-image: linear-gradient(30deg, hsla(27, 100%, 50%, 0.76), #fffb00bd), url(./backgroundImages/gods_man_29.png);
+    background-image: linear-gradient(30deg, hsla(27, 100%, 50%, 0.76), #fffb00bd), url(../../public/backgroundImages/gods_man_29.png);
     background-size: 100% 100%;
 }
 
@@ -262,7 +262,7 @@ h1{
     align-items: start;
     color: #000;
     width: 100%;
-    background-image: linear-gradient(30deg,#fffb00d5, #48ff00d5), url(./backgroundImages/904524ilsdl.png);
+    background-image: linear-gradient(30deg,#fffb00d5, #48ff00d5), url(../../public/backgroundImages/904524ilsdl.png);
     background-size: 100% 100%;
 }
 
@@ -281,7 +281,7 @@ h1{
     align-items: start;
     color: #000;
     width: 100%;
-    background-image: linear-gradient(30deg, #48ff00c5, #2587d8b2), url(./backgroundImages/gods_man_39.png);
+    background-image: linear-gradient(30deg, #48ff00c5, #2587d8b2), url(../../public/backgroundImages/gods_man_39.png);
     background-size: 100% 100%;
 }
 
@@ -300,7 +300,7 @@ h1{
     align-items: start;
     color: #000;
     width: 100%;
-    background-image: linear-gradient(30deg, #2587d8c7, #7b00ffce), url(./backgroundImages/gods_man_10_2.png);
+    background-image: linear-gradient(30deg, #2587d8c7, #7b00ffce), url(../../public/backgroundImages/gods_man_10_2.png);
     background-size: 100% 100%;
 }
 
@@ -319,7 +319,7 @@ h1{
     align-items: start;
     color: #000;
     width: 100%;
-    background-image: linear-gradient(30deg, #7b00ffc5, #ff0000cb), url(./backgroundImages/gods_man_3.png);
+    background-image: linear-gradient(30deg, #7b00ffc5, #ff0000cb), url(../../public/backgroundImages/gods_man_3.png);
     background-size: 100% 100%;
 }
 
@@ -333,12 +333,12 @@ h1{
 
 @font-face{
     font-family: 'OpenDyslexic';
-    src: url('./fonts/opendyslexic-0.92/OpenDyslexic-Regular.otf');
+    src: url('../../public/fonts/opendyslexic-0.92/OpenDyslexic-Regular.otf');
 }
 
 @font-face{
     font-family: 'Insula';
-    src: url('./fonts/insula/INSULA__.ttf');
+    src: url('../../public/fonts/insula/INSULA__.ttf');
 }
 
 @keyframes glowing {
