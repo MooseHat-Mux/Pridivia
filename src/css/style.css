@@ -1,0 +1,348 @@
+main{
+    display: flex;
+    justify-content: center;
+    transition: 1s;
+}
+
+main.hidden{
+    opacity: 0;
+}
+
+.trivia-container {
+    display: grid;
+    font-family: "Insula";
+    margin: 0 auto;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h1{
+    font-size: 40px;
+}
+
+.trivia-tally{
+    display: auto;
+}
+
+.trivia-board{
+    display: auto;
+    background: #000000;
+    font-family: "Insula";
+    color: #dadada;
+    width: 95%;
+    align-content: start;
+    margin: 0 auto;
+    font-size: 40px;
+    text-align: center;
+    border-image: url();
+}
+
+.trivia-container .timer {
+    font-weight: bold;
+    text-align: right;
+}
+
+.timer.close {
+    color: rgb(red, green, blue);
+}
+
+.trivia-container h2.question {
+    font-size: 20px;
+    background: #8E5DE8;
+    padding: 16px;
+    border-radius: 8px;
+    font-weight: normal;
+    line-height: 1.6;
+}
+
+.trivia-container .options{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.trivia-container .option{
+    border: none;
+    padding: 24px 36px;
+    font-size: 24px;
+    font-family: "OpenDyslexic";
+    background: #63c0eb;
+    color: #303030;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+}
+
+.trivia-container button{
+    cursor: url('./cursors/pride-month/gay\ Normal\ Select.cur'), auto;
+}
+
+.trivia-board button{
+    cursor: url('./cursors/pride-month/gay\ Normal\ Select.cur'), auto;
+}
+
+.option:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.option:active {
+    color: #000
+}
+
+.option:active:after {
+    background: transparent;
+}
+
+.option:hover:before {
+    opacity: 1;
+}
+
+.option:after {
+    z-index: -1;
+    content: '';
+    position: relative;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+.disabled{
+    pointer-events: none;
+}
+
+.option.correct {
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    animation: glowing 20s linear infinite;
+}
+
+.option.incorrect{
+    background: linear-gradient(45deg, #161616, #585857, #c0c0bf, #ebebeb, #808080, #3e3f41, #000000, #6d6d6d, #afafaf);
+    animation: glowing 20s linear infinite;
+}
+
+.trivia-container .end-trivia{
+    background: #222;
+    color: #fff;
+    padding: 12px 32px;
+    font-size: 20px;
+    font-family: "OpenDyslexic";
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-right: 100;
+}
+
+.trivia-container .pause-trivia{
+    background: #222;
+    color: #fff;
+    padding: 12px 32px;
+    font-size: 20px;
+    font-family: "OpenDyslexic";
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-left: 100;
+}
+
+.tally-button{
+    background: #222;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    font-family: "OpenDyslexic";
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-right: 100;
+    width: 8%;
+}
+
+.reset-button{
+    background: #222;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    font-family: "OpenDyslexic";
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-left: 100;
+    width: 8%;
+}
+
+.board-button{
+    background: #222;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    font-family: "OpenDyslexic";
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-left: 100;
+    width: 8%;
+}
+
+
+.trivia-board .categories{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1f 1f 1f 1f 1f;
+    align-items: start;
+    justify-items: stretch;
+    border-spacing: 40px;
+}
+
+.trivia-board .cat1Title{
+    padding: 30px;
+}
+
+.trivia-board .cat6Title{
+    padding: 0px;
+}
+
+.trivia-board .category1{
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    align-items: start;
+    color: #000;
+    width: 100%;
+    background-image: linear-gradient(30deg, #ff00007c, #ff730070), url(./backgroundImages/gods_man_42.png);
+    background-size: 100% 100%;
+}
+
+.trivia-board .cat1square{
+    padding: 30px;
+    font-size: 30px;
+    font-family: "Insula";
+    background: linear-gradient(30deg, #ff0000d2, #ff7300c5);
+}
+
+.trivia-board .category2{
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    align-items: start;
+    color: #000;
+    width: 100%;
+    background-image: linear-gradient(30deg, hsla(27, 100%, 50%, 0.76), #fffb00bd), url(./backgroundImages/gods_man_29.png);
+    background-size: 100% 100%;
+}
+
+.trivia-board .cat2square{
+    display: table-cell;
+    padding: 30px;
+    font-size: 30px;
+    font-family: "Insula";
+    background: linear-gradient(30deg, #ff7300c2, #fffb00be);
+}
+
+.trivia-board .category3{
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    align-items: start;
+    color: #000;
+    width: 100%;
+    background-image: linear-gradient(30deg,#fffb00d5, #48ff00d5), url(./backgroundImages/904524ilsdl.png);
+    background-size: 100% 100%;
+}
+
+.trivia-board .cat3square{
+    display: table-cell;
+    padding: 30px;
+    font-size: 30px;
+    font-family: "Insula";
+    background: linear-gradient(30deg,#fffb00c0, #48ff00bd);
+}
+
+.trivia-board .category4{
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    align-items: start;
+    color: #000;
+    width: 100%;
+    background-image: linear-gradient(30deg, #48ff00c5, #2587d8b2), url(./backgroundImages/gods_man_39.png);
+    background-size: 100% 100%;
+}
+
+.trivia-board .cat4square{
+    display: table-cell;
+    padding: 30px;
+    font-size: 30px;
+    font-family: "Insula";
+    background: linear-gradient(30deg, #48ff00c5, #2587d8b2);
+}
+
+.trivia-board .category5{
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    align-items: start;
+    color: #000;
+    width: 100%;
+    background-image: linear-gradient(30deg, #2587d8c7, #7b00ffce), url(./backgroundImages/gods_man_10_2.png);
+    background-size: 100% 100%;
+}
+
+.trivia-board .cat5square{
+    display: table-cell;
+    padding: 30px;
+    font-size: 30px;
+    font-family: "Insula";
+    background: linear-gradient(30deg, #2587d8c7, #7b00ffce);
+}
+
+.trivia-board .category6{
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    align-items: start;
+    color: #000;
+    width: 100%;
+    background-image: linear-gradient(30deg, #7b00ffc5, #ff0000cb), url(./backgroundImages/gods_man_3.png);
+    background-size: 100% 100%;
+}
+
+.trivia-board .cat6square{
+    display: table-cell;
+    padding: 30px;
+    font-size: 30px;
+    font-family: "Insula";
+    background: linear-gradient(30deg, #7b00ffc5, #ff0000cb);
+}
+
+@font-face{
+    font-family: 'OpenDyslexic';
+    src: url('./fonts/opendyslexic-0.92/OpenDyslexic-Regular.otf');
+}
+
+@font-face{
+    font-family: 'Insula';
+    src: url('./fonts/insula/INSULA__.ttf');
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
