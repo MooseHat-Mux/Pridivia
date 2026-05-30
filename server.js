@@ -3,17 +3,101 @@ const { MongoClient } = require('mongodb');
 var ComfyJS = require("comfy.js");
 const ComfyDB = require("comfydb");
 var dns = require('dns');
-const uri = "mongodb://moose:U3Z1Ldsm5ujamvPd@ac-qpcghfw-shard-00-00.6mmwsv5.mongodb.net:27017,ac-qpcghfw-shard-00-01.6mmwsv5.mongodb.net:27017,ac-qpcghfw-shard-00-02.6mmwsv5.mongodb.net:27017/?ssl=true&replicaSet=atlas-vtp5k5-shard-0&authSource=admin&appName=BlairCluster";
-const currentCorrectAnswer = "L";
-const currentQuestion = { 
-    question: "To be or Not To Be...", 
-    answers: [
-        {"A": "Weather is it nobler in the mind"},
-        {"B": "Whether tis nobler in the mind"},
-        {"C": "Sling my fucking arrows goblin"},
-        {"D": "Not just arrows but slings and arrows"},
-    ]};
-const currentAnswers = [];
+require('dotenv').config();
+const client = new MongoClient(process.env.MONGOMOOSEURI);
+
+const Board = require('./app/models/Board.model');
+const Question = require('./app/models/Question.model');
+const QuestionBucket = require('./app/models/QuestionBucket.model')
+const Chatter = require('./app/models/Chatter.model');
+const Tally = require('./app/models/Tally.model');
+
+const newChatter = new Chatter({
+    _id: 0,
+    _username: '',
+    _clan: ''
+});
+
+const newQuestion = new Question({
+    _active : true,
+    _difficulty: 0,
+    _question : '',
+    _correctAnswer: '',
+    _answers: [
+        { _answer1: ''},
+        { _answer2: ''},
+        { _answer3: ''},
+        { _answer4: ''},
+    ]
+});
+
+const questionBueckt = new QuestionBucket({
+    _category = 0,
+    _difficulty = 0,
+    _possibleQuestions : [newQuestion]
+});
+
+var currentBoard = new Board({
+    _boardId : 'board',
+    _cat1 : [
+        { q1 : true },
+        { q2 : true },
+        { q3 : true },
+        { q4 : true },
+        { q5 : true }
+    ],
+    _cat2 : [
+        { q1 : true },
+        { q2 : true },
+        { q3 : true },
+        { q4 : true },
+        { q5 : true }
+    ],
+    _cat3 : [
+        { q1 : true },
+        { q2 : true },
+        { q3 : true },
+        { q4 : true },
+        { q5 : true }
+    ],
+    _cat4 : [
+        { q1 : true },
+        { q2 : true },
+        { q3 : true },
+        { q4 : true },
+        { q5 : true }
+    ],
+    _cat5 : [
+        { q1 : true },
+        { q2 : true },
+        { q3 : true },
+        { q4 : true },
+        { q5 : true }
+    ],
+    _cat6 : [
+        { q1 : true },
+        { q2 : true },
+        { q3 : true },
+        { q4 : true },
+        { q5 : true }
+    ],
+});
+
+var currentTally = new Tally({
+    id: 'Tally',
+    jester: 0,
+    dragon: 0,
+    vampire: 0,
+    gargoyle: 0,
+    warlock: 0,
+    thrall: 0,
+    lycan: 0,
+    mortals: 0
+});
+
+var currentCorrectAnswer = "L";
+var currentQuestion = newQuestion;
+var currentAnswers = [];
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
     if(command === "test"){
@@ -42,8 +126,6 @@ ComfyJS.Init("blair");
 (async() =>{
     // console.log(await dns.getServers());
     // require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
-
-    const client = new MongoClient(uri);
  
     try {
         // Connect to the MongoDB cluster
@@ -59,11 +141,20 @@ ComfyJS.Init("blair");
     }
 })();
 
-async function listDatabases(client){
-    const databasesList = await client.db().admin().listDatabases();
+async function getBoard(client){
+    const boardResult = await client.db("creatures").collection("JeopargayData").findOne({_boardId: "board"});
 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+    if(boardResult){
+        console.log(`Found Board`);
+        console.log(boardResult);
+        currentBoard = boardResult;
+    }
+    else {
+        console.log(`No board found, new board created`);
+        const fullBoard= await client.db("creatures").collection("JeopargayData").insertOne(currentBoard);
+        
+        console.log(fullBoard);
+    }
 }
 
 async function checkTally(client){
@@ -75,35 +166,39 @@ async function checkTally(client){
     }
     else {
         console.log(`No tallies found, new tally created`);
-        const zeroTally = await client.db("creatures").collection("JeopargayData").insertOne(
-            { id: "Tally",
-             jester: 0,
-             dragon: 0,
-             vampire: 0,
-             gargoyle: 0,
-             warlock: 0,
-             thrall: 0,
-             lycan: 0,
-             mortals: 0 }
-        );
+        const zeroTally = await client.db("creatures").collection("JeopargayData").insertOne(currentTally);
         
         console.log(zeroTally);
     }
 }
 
-async function retrieveQuestion(client, category){
-    const questionsResult = await client.db("creatures").collection("JeopargayData").findOne({_category: category, _active: true});
+async function retrieveQuestion(client, category, difficulty){
+    const questionsResult = await client.db("jeopargay").collection("questions").findOne({_category: category}, {_difficulty: difficulty});
     
     if(questionsResult)
     {
-        console.log(`Got a question! ${category}`);
+        console.log(`Got a question from cat ${category} at difficulty ${difficulty}`);
         console.log(questionsResult);
 
         // Randomly pick one of the active questions
+        const activeQuestions = questionsResult.filter(question => question.active === true);
+        
+        if(activeQuestions)
+        {
+            currentQuestion = activeQuestions[Math.floor(Math.random() * activeQuestions.length)];
+        }
+        else{
+            questionsResult.map(function(question){
+                question.active = true;
+                return question;
+            });
+
+            // Reset Questions
+            currentQuestion = questionsResult[Math.floor(Math.random() * activeQuestions.length)];
+        }
     }
     else{
         console.log(`No questions found or none are active`);
-        // If none are active anymore refresh all
     }
 }
 
@@ -200,11 +295,24 @@ function sumObjectsByKey(...objs) {
 
 const app = express();
 
-app.get('/message', (req, res) =>{
-    res.json({message: "We got a message from the backend"});
+app.use(express.static('public'))
+
+app.get('/board', (req, res) =>{
+
+    res.json(currentBoard);
 })
 
-app.post('/message', (req, res) =>{
+app.get('/question', (req, res) =>{
+
+    res.json(currentQuestion);
+})
+
+app.get('/tally', (req, res) =>{
+
+    res.json(currentTally);
+})
+
+app.post('/updatetally', (req, res) =>{
     const {name, message } = req.body;
 
     console.log('Database message: ', name, message)

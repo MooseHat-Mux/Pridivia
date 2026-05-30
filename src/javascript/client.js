@@ -5,6 +5,7 @@ const endButton = document.getElementById("end-button");
 const resetButton = document.getElementById("reset-button");
 const tallyButton = document.getElementById("tally-button");
 const boardButton = document.getElementById("board-button");
+const serverUrl = "localhost:3000/server.js";
 
 const currentQuestion = {
     active : true,
@@ -42,12 +43,21 @@ resetButton.addEventListener("click", ()=>{
 });
 
 boardButton.addEventListener("click", ()=>{
-    initializeBoard();
+    const boardResult = await initializeBoard();
+
+    if(boardResult){
+        console.log(boardResult);
+    }
+    else{
+        console.log(`Unable to get board`);
+    }
 });
 
-function initializeBoard(){
+async function initializeBoard(){
+    try{
+        const response = await fetch(url);
 
-
+    }
 }
 
 function showTally(){
