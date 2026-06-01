@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Define Tally schema
 const tallySchema = new mongoose.Schema({
-    id: { type: String, required: true },
+    _id: { type: String, required: true },
     jester: { type: Number, required: true},
     dragon: { type: Number, required: true},
     vampire: { type: Number, required: true},
@@ -13,6 +13,4 @@ const tallySchema = new mongoose.Schema({
     mortals: { type: Number, required: true}
 });
 
-// Create the Tally model from the schema
-const Tally = mongoose.model('Tally', tallySchema);
-module.exports = Tally;
+module.exports = mongoose.model('Tally', tallySchema);

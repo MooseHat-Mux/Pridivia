@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
+const Question = require('./Question.model');
 
 // Define Question Bucket schema
 const questionBucketSchema = new mongoose.Schema(
     { _category : Number },
     { _difficulty: Number },
-    { _possibleQuestions : [new Question()] }
+    { _possibleQuestions : [Question] }
 );
 
-// Create the Question Bucket model from the schema
-const QuestionBucket = mongoose.model('QuestionBucket', questionBucketSchema);
-module.exports = QuestionBucket;
+module.exports = mongoose.model('QuestionBucket', questionBucketSchema);

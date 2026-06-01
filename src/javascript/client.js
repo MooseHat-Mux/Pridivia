@@ -1,11 +1,33 @@
 const boardElement = document.getElementById("trivia-board");
 const questionElement = document.getElementById("trivia-container");
 const tallyElement = document.getElementById("trivia-tally");
-const endButton = document.getElementById("end-button");
-const resetButton = document.getElementById("reset-button");
-const tallyButton = document.getElementById("tally-button");
-const boardButton = document.getElementById("board-button");
+var cat1Buttons = document.getElementsByClassName("cat1square");
+var buttonCount = cat1Buttons.length;
+var cat2Buttons = document.getElementsByClassName("cat2square");
+var cat3Buttons = document.getElementsByClassName("cat3square");
+var cat4Buttons = document.getElementsByClassName("cat4square");
+var cat5Buttons = document.getElementsByClassName("cat5square");
+var cat6Buttons = document.getElementsByClassName("cat6square");
+
 const serverUrl = "localhost:3000/server.js";
+
+const answersSchema = {
+    q1 : true,
+    q2 : true,
+    q3 : true,
+    q4 : true,
+    q5 : true
+};
+
+const boardSchema = {
+    _boardId : "",
+    cat1 : answersSchema,
+    cat2 : answersSchema,
+    cat3 : answersSchema,
+    cat4 : answersSchema,
+    cat5 : answersSchema,
+    cat6 : answersSchema
+};
 
 const currentQuestion = {
     active : true,
@@ -29,33 +51,76 @@ const currentTally = [
     { mortals: 0}
 ];
 
-endButton.addEventListener("click", ()=>{
-    initializeBoard();
-});
+window.addEventListener("load", (event) =>{
+    console.log(window.location.href);
 
-tallyButton.addEventListener("click", ()=>{
-    showTally();
-});
-
-resetButton.addEventListener("click", ()=>{
-    // Refresh board so all tiles have fresh questions
-    // If all questions have been asked refresh the bucked of questions and update the database
-});
-
-boardButton.addEventListener("click", ()=>{
-    const boardResult = await initializeBoard();
-
-    if(boardResult){
-        console.log(boardResult);
+    if(window.location.href.match('index.html')){
+        initializeBoard();
+    }
+    else if(window.location.href.match('question.html')){
+        startJeopargay();
     }
     else{
-        console.log(`Unable to get board`);
+        showTally();
     }
 });
 
-async function initializeBoard(){
+function initializeButtons(){
+
+    // Get board grid then disable non-active buttons
+    console.log(`Initializing 6 x ${buttonCount}`)
+
+    for(let i = 0; i < buttonCount; i++){
+        cat1Buttons[i].addEventListener('click', () =>{
+            setUpButton(0, i);
+        });
+    }
+
+    for(let i = 0; i < buttonCount; i++){
+        cat2Buttons[i].addEventListener('click', () =>{
+            setUpButton(1, i);
+        });
+    }  
+
+    for(let i = 0; i < buttonCount; i++){
+        cat3Buttons[i].addEventListener('click', () =>{
+            setUpButton(2, i);
+        });
+    }    
+    
+    for(let i = 0; i < buttonCount; i++){
+        cat4Buttons[i].addEventListener('click', () =>{
+            setUpButton(3, i);
+        });
+    }    
+    
+    for(let i = 0; i < buttonCount; i++){
+        cat5Buttons[i].addEventListener('click', () =>{
+            setUpButton(4, i);
+        });
+    }    
+    
+    for(let i = 0; i < buttonCount; i++){
+        sessionStorage.setItem('difficulty' + i, i);
+
+        cat6Buttons[i].addEventListener('click', () =>{
+            setUpButton(5, i);
+        });
+    }
+}
+
+function setUpButton(cat, diff){   
+    console.log(`Setting category ${cat} at difficulty ${diff}`);
+    sessionStorage.setItem('category', cat);
+    sessionStorage.setItem('difficulty', diff);
+}
+
+function initializeBoard(){
     try{
-        const response = await fetch(url);
+        const response = fetch(url);
+
+    }
+    catch(err){
 
     }
 }
@@ -67,17 +132,27 @@ function showTally(){
 }
 
 function startJeopargay(){
-
-    // Retrieve random active question from mongodb
+    // Start Timer
+    // Retrieve Question
     showQuestion();
-
-    // Set question to inactive effectively removing it from selection
 }
 
 function showQuestion(){
-    
+    // Call question passing category and difficulty
+    // Gets back a random question from available questions in bucket
+    // Updates database with active buttons
+
+    let currentCatDiff = JSON.parse(sessionStorage.getItem('currentCatDiff'));
+    console.log(currentCatDiff);
+
+    let category = sessionStorage.getItem('category');
+    let difficulty =  sessionStorage.getItem('difficulty');
+
+    console.log(`Cat ${category} at difficulty ${difficulty} Question called`);
 }
 
 function calculateCurrentTally(){
     
 }
+
+initializeButtons();

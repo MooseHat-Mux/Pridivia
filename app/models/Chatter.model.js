@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 
 // Define Chatter schema
 const chatterSchema = new mongoose.Schema(
-    {_id: {
-        type: Int16Array,
-        required: true,
-        unique: true,
-    }},
     {_username: {
         type: String,
         required: true,
@@ -22,6 +17,4 @@ const chatterSchema = new mongoose.Schema(
     }}
 );
 
-// Create the Chatter model from the schema
-const Chatter = mongoose.model('Chatter', chatterSchema);
-module.exports = Chatter;
+module.exports = mongoose.model('Chatter', chatterSchema);

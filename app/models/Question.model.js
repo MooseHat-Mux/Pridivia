@@ -25,7 +25,3 @@ const questionSchema = new mongoose.Schema(
         { _answer4: String}
     ]}
 );
-
-// Create the Question model from the schema
-const Question = mongoose.model('Question', questionSchema);
-module.exports = Question;
