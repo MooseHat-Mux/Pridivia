@@ -13,12 +13,16 @@
   },
   "dependencies": {
     "aws4": "^1.13.2",
+    "axios": "^1.16.1",
     "comfy.js": "^1.1.29",
     "comfydb": "^2.0.4",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
     "express": "^5.2.1",
     "mongodb": "^7.2.0",
     "mongoose": "^9.6.3",
+    "pug": "^3.0.4",
     "uniq": "^1.0.1"
   },
   "devDependencies": {

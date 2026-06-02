@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 var ComfyJS = require("comfy.js");
 const ComfyDB = require("comfydb");
 const path = require("path");
+//const compression = require("compression");
 const indexRouter = require("./app/routes/index");
-const boardRouter = require("./app/routes/App")
+const boardRouter = require("./app/routes/board")
 
 var dns = require('dns');
 require('dotenv').config();
@@ -96,32 +97,13 @@ mongoose.connection.once('open', () =>{
         
     mongoose.connection.useDb(jeopargayuri);
     const boardResult = Board.findOneAndUpdate(boardQuery, update, options).then(
-        console.log(`Initiated Board`)
+        console.log(`Initiated database Board`)
     ).catch(function(err) {
         console.log(`Error initializing board ::`, err);      
     });
 
     console.log(boardResult);
 })
-
-
-async function getBoard(){
-    mongoose.connection.useDb(jeopargayuri);
-
-    try{
-        const boardResult = await Board.findOne({ _boardId : "board" });
-        
-        if(boardResult){
-            console.log(`Found Board`);
-            console.log(boardResult);
-
-            return boardResult;
-        }
-    }catch(err)
-    {
-        console.log(`Error retrieving board ::`, err);      
-    }
-}
 
 async function updateBoard(catIndex, answerIndex){
     mongoose.connection.useDb(jeopargayuri);
@@ -306,20 +288,60 @@ function sumObjectsByKey(...objs) {
 // This side of the server is communication between serverside and clientside
 // All post/get instructions are received here when called from the client
 
-const app = express();
-app.set("views", path.join(__dirname, "views"))
+const server = express();
+// server.set("views", path.join(__dirname, "public/views"))
+// server.set("view engine", "ejs");
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(compression()); // Compress all routes
+server.use(express.json());
+server.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/", boardRouter);
+server.use("/", indexRouter);
+server.use("/board", boardRouter);
 
-app.listen(port, () => {
+server.listen(port, () => {
+    console.log(`public path ${path.join(__dirname, "public")}`);
     console.log("Server started on port 3000");
 });
 
 function handleError(err){
     console.log(`Database error ::`, err);      
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
+}
+
+server.on("error", onError);
+server.on("listening", onListening);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+
+  var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
 }

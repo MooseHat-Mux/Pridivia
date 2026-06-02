@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 
 // Define Question schema
 const questionSchema = new mongoose.Schema(
-    { _active: {
-        type: Boolean,
-        required: true,
-    }},
     { _difficulty: {
         type: Number, required: true
     }},
