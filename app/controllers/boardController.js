@@ -31,6 +31,10 @@ exports.board_data = async(req, res, next) =>{
     }
 }
 
+exports.update_board = async(req, res, next) =>{
+    
+}
+
 async function getBoard(){
     mongoose.connection.useDb(jeopargayuri);
     

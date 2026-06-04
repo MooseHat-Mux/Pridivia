@@ -1,8 +1,9 @@
 const express = require('express');
+const bodyParser = require("body-parser");
+const cors = require('cors');
 require('./config/connection');
 const mongoose = require('mongoose');
 var ComfyJS = require("comfy.js");
-const ComfyDB = require("comfydb");
 const path = require("path");
 //const compression = require("compression");
 const indexRouter = require("./app/routes/index");
@@ -13,63 +14,40 @@ require('dotenv').config();
 const port = process.env.PORT;
 const creatureuri = process.env.CREATURESURI;
 const jeopargayuri = process.env.JEOPARGAYURI;
+const { createServer } = require('node:http');
+const { chatServer } = require('socket.io');
 
 const Board = require('./app/models/Board.model');
-const Question = require('./app/models/Question.model');
 const QuestionBucket = require('./app/models/QuestionBucket.model')
 const Tally = require('./app/models/Tally.model');
 const Chatter = require('./app/models/Chatter.model');
-
-// const newQuestion = new Question({
-//     _active : true,
-//     _difficulty: 0,
-//     _question : '',
-//     _correctAnswer: '',
-//     _answers: [
-//         { _answer1: ''},
-//         { _answer2: ''},
-//         { _answer3: ''},
-//         { _answer4: ''},
-//     ]
-// });
-
-// var currentTally = new Tally({
-//     id: 'Tally',
-//     jester: 0,
-//     dragon: 0,
-//     vampire: 0,
-//     gargoyle: 0,
-//     warlock: 0,
-//     thrall: 0,
-//     lycan: 0,
-//     mortals: 0
-// });
-
-var currentAnswers = [];
+const currentAnswers = [];
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
     if(command === "test"){
         console.log("Wow you hit a thing!!");
     }
 
-    if(command === "A"){
-        addAnswer(user.id, "A");
-    }
-    else if(command === "B"){
-        addAnswer(user.id, "B");
-    }
-    else if(command === "C"){
-        addAnswer(user.id, "C");
-    }
-    else if(command === "D"){
-        addAnswer(user.id, "D");
+    if(!timeDone){
+        if(command === "A"){
+            addAnswer(user.id, "A");
+        }
+        else if(command === "B"){
+            addAnswer(user.id, "B");
+        }
+        else if(command === "C"){
+            addAnswer(user.id, "C");
+        }
+        else if(command === "D"){
+            addAnswer(user.id, "D");
+        }
     }
 
     if((flags.mod || flags.broadcaster) && command === "clan"){
         console.log(`${message} this is the fucking clan command I guess idk`);
     }
 }
-ComfyJS.Init("blair");
+ComfyJS.Init(streamuri);
 
 mongoose.connection.once('open', () =>{
     console.log('Connected to Mongodb');
@@ -167,108 +145,141 @@ async function checkTally(){
     // }
 }
 
-async function retrieveQuestion(client, category, difficulty){
-    const questionsResult = await client.db("jeopargay").collection("questions").findOne({_category: category}, {_difficulty: difficulty});
-    
-    if(questionsResult)
-    {
-        console.log(`Got a question from cat ${category} at difficulty ${difficulty}`);
-        console.log(questionsResult);
-
-        // Randomly pick one of the active questions
-        const activeQuestions = questionsResult.filter(question => question.active === true);
-        
-        if(activeQuestions)
-        {
-            currentQuestion = activeQuestions[Math.floor(Math.random() * activeQuestions.length)];
-        }
-        else{
-            questionsResult.map(function(question){
-                question.active = true;
-                return question;
-            });
-
-            // Reset Questions
-            currentQuestion = questionsResult[Math.floor(Math.random() * activeQuestions.length)];
-        }
-    }
-    else{
-        console.log(`No questions found or none are active`);
-    }
-}
-
-function addAnswer(userId, newAnswer){
-    if(!(userId in currentAnswers))
-    {
-        currentAnswers[userId] = newAnswer;
-    }
+function addAnswer(userId, username, newAnswer){
+    currentAnswers.push({
+        _userid: userId,
+        _username: username,
+        _answer: newAnswer
+    });
 }
 
 async function checkAnswers(){
-    var ids = currentAnswers.map(function(id){ return ObjectId(id); });
+    // Get current list of creatures
+    const currentCreatures = await Chatter.find();                
 
-    const creatureResult = await client.db("creatures").collection("JeopargayData").find({_id: {$in: ids}});
-    const currentTally = 
-        { id: "Tally",
-            jester: 0,
-            dragon: 0,
-            vampire: 0,
-            gargoyle: 0,
-            warlock: 0,
-            thrall: 0,
-            lycan: 0,
-            mortals: 0 };
 
-    for(var key in currentAnswers){
-        if(currentAnswers.hasOwnProperty(key)){
-            var thisClan = "mortals";
+    // Get current baseValue based on difficulty
+    const difficulty = foundQuestionData._difficulty;
+    if(difficulty < 1){
+        difficulty++;
+    }
+    
+    const possibleWinnings = baseValue * difficulty;
 
-            if(!(key in creatureResult)){
-                // Make them mortal
-                // Add them to mortals database
+    // Update missing chatters from received answers
+    const newCreatures = [];
+
+    var answerCount = currentAnswers.length;
+    for(var i; i < answerCount; i++){
+        var thisClan = "mortals";
+
+        if(!(currentAnswers[i]._userId in currentCreatures)){
+            // Make them mortal
+            // Add them to mortals database
+            const chatterData = {
+                _userid : key,
+                _username : currentAnswers[i]._username,
+                _clan : thisClan
+            };
+            
+            newCreatures.push(chatterData);
+        }
+    }
+    
+    await calculateCurrentTally(currentTally);
+}
+
+async function calculateCurrentTally(updateCreatures){
+    const currentCreatures = await fetch('/board/chatters', options).then(chatters => {
+        return chatters.json();
+    }).then(data => {
+        console.log('Data retrieved');
+        console.log(data);
+    }).catch(err => console.log(err));
+    
+    // Set base tally
+    const currentTally = {
+        _jester: 0,
+        _dragon: 0,
+        _vampire: 0,
+        _gargoyle: 0,
+        _warlock: 0,
+        _thrall: 0,
+        _lycan: 0,
+        _mortals: 0 
+    };
+
+    for(var key in currentCreatures)
+    {
+        const foundUser = currentAnswers.find((userid) => _userid == currentCreatures[key]._username);
+
+        if(foundUser)
+        {
+            const thisClan = currentCreatures[key].clan;     
+            if(currentCreatures[key]._answer === foundQuestionData._correctanswer){
+                currentTally[thisClan]++;
             }
-            else{
-                thisClan = creatureResult.clan;
-            }
-
-            if(currentAnswers[key] === currentCorrectAnswer){
-                currentTally[clan] += 1;
-            }
-            else currentTally[clan] -= 1;
+            else currentTally[thisClan] --;
         }
     }
 
-    currentAnswers = [];
-    updateTallies(client, currentTally);
+    const clanCount = currentTally.length;
+    const totalTally = 0;
+    for(var key in currentTally){
+        totalTally += currentTally[key];
+    }
+
+    for(var key in currentTally){
+        if(currentTally[key] != 0)
+        {
+            var weightedTally = baseValue / currentTally[key];
+            var newTally = baseValue * weightedTally;
+
+            currentTally[key] = newTally;
+        }
+    }
+    
+    // Clear Answers
+    currentAnswers = {};
+
+    currentTally._tallyid = "tally";
+    await updateTallies(currentTally);
 }
 
+async function updateTallies(newTally){
+    const options = {
+        method: "POST",
+        body: JSON.stringify(newTally)
+    };
 
-async function updateTallies(client, newTally){
-    const tallyResult = await client.db("creatures").collection("JeopargayData").findOne({id: "Tally"});
+    const tallyResult = await fetch('/board/tally/update', options)
+        .then(tallydisplay => {
+            return tallydisplay.json();
+        }).then(data => {
+            console.log('Tally data retrieved');
+            const foundTallyData = data.data.currentTally;
+            console.log(foundTallyData);
+        });
 
     if(tallyResult){
         console.log(`Found tallies`);
         console.log(tallyResult);
 
-        const sumTally = sumObjectsByKey(tallyResult, newTally);
-        console.log(`Summerized Tallies`);
-        console.log(sumTally);
+        // const sumTally = sumObjectsByKey(tallyResult, newTally);
+        // console.log(`Summerized Tallies`);
+        // console.log(sumTally);
         
-        const oldResult = await client.db("creatures").collection("JeopargayData").updateOne({id: "OldTally"}, { $set: tallyResult});
-        console.log(`Old tally result in database`);
-        console.log(oldResult);
+        // const oldResult = await client.db("creatures").collection("JeopargayData").updateOne({id: "OldTally"}, { $set: tallyResult});
+        // console.log(`Old tally result in database`);
+        // console.log(oldResult);
         
-        const newResult = await client.db("creatures").collection("JeopargayData").updateOne({id: "Tally"}, { $set: sumTally});
-        console.log(`New tally result in database`);
-        console.log(newResult);
+        // const newResult = await client.db("creatures").collection("JeopargayData").updateOne({id: "Tally"}, { $set: sumTally});
+        // console.log(`New tally result in database`);
+        // console.log(newResult);
     }
     else{
         console.log(`Unabled to retrieve tallies`);
     }
-}
-
-function uploadQuestion(question){
-
 }
 
 function addToClan(user, clan){
@@ -289,11 +300,13 @@ function sumObjectsByKey(...objs) {
 // All post/get instructions are received here when called from the client
 
 const server = express();
-// server.set("views", path.join(__dirname, "public/views"))
-// server.set("view engine", "ejs");
-
+const chatserver = createServer(server);
+const io = new Server(chatserver);
 server.use(express.json());
+server.use(express.text());
+server.use(express.urlencoded({ extended: true }));
 server.use(express.static(path.join(__dirname, "public")));
+server.use(cors());
 
 server.use("/", indexRouter);
 server.use("/board", boardRouter);
@@ -319,7 +332,15 @@ function onListening() {
 
 server.on("error", onError);
 server.on("listening", onListening);
+io.on('connection', (socket) =>{
+    console.log('master connected');
+    
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 
+    socket.broadcast.emit('chatanswers', );
+});
 /**
  * Event listener for HTTP server "error" event.
  */

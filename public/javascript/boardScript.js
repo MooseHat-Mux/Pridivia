@@ -7,8 +7,6 @@ var cat5Buttons = document.getElementsByClassName("cat5square");
 var cat6Buttons = document.getElementsByClassName("cat6square");
 const serverUrl = "/board";
 
-initializeBoard();
-
 async function initializeBoard(){
     try{
         console.log('Initializing Board');
@@ -41,12 +39,12 @@ function initializeButtons(data){
     console.log(`Initializing 6 x ${buttonCount}`)
 
     for(var boardKey in currentBoard){
-        console.log(`${boardKey}`);
+        //console.log(`${boardKey}`);
         if(boardKey === "_cat1")
         {
             for(var questionKey in currentBoard[boardKey])
             {
-                var index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
+                let index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
                 if (index > -1){
                     if(currentBoard[boardKey][questionKey])
                     {
@@ -65,14 +63,14 @@ function initializeButtons(data){
         {
             for(var questionKey in currentBoard[boardKey])
             {
-                var index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
+                let index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
                 if (index > -1){
                     if(currentBoard[boardKey][questionKey])
                     {
                         cat2Buttons[index].addEventListener('click', () =>{
                             setUpButton(1, index);
                         });
-                        console.log(`${boardKey} : ${questionKey} => ${index}`);
+                        //console.log(`${boardKey} : ${questionKey} => ${index}`);
                     }
                     else{
                         cat2Buttons[index].disabled = true;
@@ -84,14 +82,14 @@ function initializeButtons(data){
         {
             for(var questionKey in currentBoard[boardKey])
             {
-                var index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
+                let index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
                 if (index > -1){
                     if(currentBoard[boardKey][questionKey])
                     {
                         cat3Buttons[index].addEventListener('click', () =>{
                             setUpButton(2, index);
                         });
-                        console.log(`${boardKey} : ${questionKey} => ${index}`);
+                        //console.log(`${boardKey} : ${questionKey} => ${index}`);
                     }
                     else{
                         cat3Buttons[index].disabled = true;
@@ -103,14 +101,14 @@ function initializeButtons(data){
         {
             for(var questionKey in currentBoard[boardKey])
             {
-                var index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
+                let index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
                 if (index > -1){
                     if(currentBoard[boardKey][questionKey])
                     {
                         cat4Buttons[index].addEventListener('click', () =>{
                             setUpButton(3, index);
                         });
-                        console.log(`${boardKey} : ${questionKey} => ${index}`);
+                        //console.log(`${boardKey} : ${questionKey} => ${index}`);
                     }
                     else{
                         cat4Buttons[index].disabled = true;
@@ -122,14 +120,14 @@ function initializeButtons(data){
         {
             for(var questionKey in currentBoard[boardKey])
             {
-                var index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
+                let index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
                 if (index > -1){
                     if(currentBoard[boardKey][questionKey])
                     {
                         cat5Buttons[index].addEventListener('click', () =>{
                             setUpButton(4, index);
                         });
-                        console.log(`${boardKey} : ${questionKey} => ${index}`);
+                        //console.log(`${boardKey} : ${questionKey} => ${index}`);
                     }
                     else{
                         cat5Buttons[index].disabled = true;
@@ -141,14 +139,14 @@ function initializeButtons(data){
         {
             for(var questionKey in currentBoard[boardKey])
             {
-                var index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
+                let index = parseInt(questionKey.replace('q', '')) - 1; // Replace all leading non-digits with nothing
                 if (index > -1){
                     if(currentBoard[boardKey][questionKey])
                     {
                         cat6Buttons[index].addEventListener('click', () =>{
                             setUpButton(5, index);
                         });
-                        console.log(`${boardKey} : ${questionKey} => ${index}`);
+                        //console.log(`${boardKey} : ${questionKey} => ${index}`);
                     }
                     else{
                         cat6Buttons[index].disabled = true;
@@ -159,42 +157,4 @@ function initializeButtons(data){
     }
 }
 
-    // for(let i = 0; i < buttonCount; i++){
-    //     cat1Buttons[i].addEventListener('click', () =>{
-    //         setUpButton(0, i);
-    //     });
-    // }
-
-    // for(let i = 0; i < buttonCount; i++){
-    //     cat2Buttons[i].addEventListener('click', () =>{
-    //         setUpButton(1, i);
-    //     });
-    // }  
-
-    // for(let i = 0; i < buttonCount; i++){
-    //     cat3Buttons[i].addEventListener('click', () =>{
-    //         setUpButton(2, i);
-    //     });
-    // }    
-    
-    // for(let i = 0; i < buttonCount; i++){
-    //     cat4Buttons[i].addEventListener('click', () =>{
-    //         setUpButton(3, i);
-    //     });
-    // }    
-    
-    // for(let i = 0; i < buttonCount; i++){
-    //     cat5Buttons[i].addEventListener('click', () =>{
-    //         setUpButton(4, i);
-    //     });
-    // }    
-    
-    // for(let i = 0; i < buttonCount; i++){
-    //     sessionStorage.setItem('difficulty' + i, i);
-
-    //     cat6Buttons[i].addEventListener('click', () =>{
-    //         setUpButton(5, i);
-    //     });
-    // }
-// }
-
+initializeBoard();

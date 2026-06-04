@@ -56,12 +56,12 @@ h1{
 }
 
 .trivia-container h2.question {
-    font-size: 20px;
+    font-size: 40px;
     background: #8E5DE8;
-    padding: 16px;
+    padding: 10px;
     border-radius: 8px;
     font-weight: normal;
-    line-height: 10;
+    line-height: 5;
 }
 
 .trivia-container .options{
