@@ -1,5 +1,5 @@
 const streamuri = process.env.HERGRACE;
-var currentAnswers = {};
+var currentAnswers = [];
 const selectedAnswer = '';
 const foundQuestionData = '';
 const timeDone = false;
@@ -99,6 +99,21 @@ document.addEventListener("DOMContentLoaded", function(){
 
         timerElement.innerHTML = `Time Remaining : ${remainingTime}`;
 
+        try{
+            console.log('Initializing Start Timer Data');
+            const requestBody = {
+                timeStart: true
+            };
+            const options = {
+                method: "POST",
+                body: JSON.stringify(requestBody)
+            }
+
+            await fetch('/board/timer', options);
+        }catch(err){
+            console.log('Error setting timer ::', err);
+        }
+
         countdownInterval = setInterval(() =>{
             remainingTime--;
 
@@ -109,11 +124,29 @@ document.addEventListener("DOMContentLoaded", function(){
             else{
                 clearInterval(countdownInterval);
                 timerElement.innerHTML = 'Womp Womp';
-                timerDone = true;
+                try{
+                    console.log('Initializing End Timer Data');
+                    const requestBody = {
+                        timeStart: false
+                    };
+                    const options = {
+                        method: "POST",
+                        body: JSON.stringify(requestBody)
+                    }
+
+                    await fetch('/board/timer', options);
+                }catch(err){
+                    console.log('Error setting timer ::', err);
+                }
+
                 showAnswer();
             }
         }, 1000);
     }
 
     startJeopargay();
+});
+
+socket.on('chatanswers', (data) => {
+    currentAnswers = data;
 });

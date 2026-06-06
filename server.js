@@ -5,9 +5,8 @@ require('./config/connection');
 const mongoose = require('mongoose');
 var ComfyJS = require("comfy.js");
 const path = require("path");
-//const compression = require("compression");
 const indexRouter = require("./app/routes/index");
-const boardRouter = require("./app/routes/board")
+const boardRouter = require("./app/routes/board");
 
 var dns = require('dns');
 require('dotenv').config();
@@ -18,9 +17,10 @@ const { createServer } = require('node:http');
 const { chatServer } = require('socket.io');
 
 const Board = require('./app/models/Board.model');
-const QuestionBucket = require('./app/models/QuestionBucket.model')
+const QuestionBucket = require('./app/models/QuestionBucket.model');
 const Tally = require('./app/models/Tally.model');
 const Chatter = require('./app/models/Chatter.model');
+const jeopargay_started = false;
 const currentAnswers = [];
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
@@ -28,7 +28,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
         console.log("Wow you hit a thing!!");
     }
 
-    if(!timeDone){
+    if(jeopargay_started){
         if(command === "A"){
             addAnswer(user.id, "A");
         }
@@ -339,7 +339,7 @@ io.on('connection', (socket) =>{
         console.log('user disconnected');
     });
 
-    socket.broadcast.emit('chatanswers', );
+    socket.broadcast.emit('chatanswers', currentAnswers);
 });
 /**
  * Event listener for HTTP server "error" event.

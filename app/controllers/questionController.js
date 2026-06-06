@@ -1,5 +1,6 @@
 const QuestionBucket = require("../models/QuestionBucket.model");
 const Chatter = require("../models/Chatter.model");
+const server = require('../../server');
 const path = require("path");
 const mongoose = require('mongoose');
 const jeopargayuri = process.env.JEOPARGAYURI;
@@ -38,6 +39,18 @@ exports.display_question = async(req, res, next) =>{
     catch(err){
         console.log('Error sending json :: ', err);
         res.status(500).send('json not found');
+    }
+}
+
+exports.timer_set = async(req, res, next) =>{
+    try{
+        let timer_data = req.body;
+        const timecheck = timer_data.timeStart;
+        server.jeopargay_started = timecheck;
+        console.log('Timer state ::', timerCheck.timeDone);
+    }
+    catch(err){
+        console.log('Error setting timer :: ', err);
     }
 }
 

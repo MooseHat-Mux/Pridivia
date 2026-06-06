@@ -31,6 +31,9 @@ router.post('/updatequestion', question_controller.update_questionbucket);
 // POST for getting a question from the buckets
 router.post('/replacequestion', question_controller.replace_questionbucket);
 
+// POST for getting a question from the buckets
+router.post('/timer', question_controller.timer_set);
+
 // GET request for showing current tally
 router.get('/tally', tally_controller.tally_check);
 
