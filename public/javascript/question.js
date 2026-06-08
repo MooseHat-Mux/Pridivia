@@ -1,7 +1,7 @@
 const streamuri = process.env.HERGRACE;
 var currentAnswers = [];
 const selectedAnswer = '';
-const foundQuestionData = '';
+const foundQuestionData = {};
 const timeDone = false;
 const dailydouble = false;
 const baseValue = 100;
@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function(){
     var questionElement = document.getElementById("question-display");
     var answers = document.getElementsByClassName('option');
     let countdownInterval;
+    const answer_results = {};
 
     async function InitializeAnswers(){
         console.log(`Answers initialized`);
@@ -61,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 let index = 0;
                 for(var option in answers){
                     answers[option].innerHTML = _answers[index];
+                    answer_results[_answers[index]] = answers[option];
                     console.log(`Option ${index}: ${_answers[index]}`)
                     index++;
                 }
@@ -89,6 +91,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
         for(var option in answers){
             answers[option].disabled = true;
+        }
+
+        // Highlight correct answer
+        for(var option in answers){
+            if(answers[option].innerHTML === foundQuestionData._correct_answer){
+                
+            }
         }
     }
 

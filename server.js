@@ -11,10 +11,11 @@ const boardRouter = require("./app/routes/board");
 var dns = require('dns');
 require('dotenv').config();
 const port = process.env.PORT;
+const streamuri = process.env.HERGRACE;
 const creatureuri = process.env.CREATURESURI;
 const jeopargayuri = process.env.JEOPARGAYURI;
 const { createServer } = require('node:http');
-const { chatServer } = require('socket.io');
+const { Server } = require('socket.io');
 
 const Board = require('./app/models/Board.model');
 const QuestionBucket = require('./app/models/QuestionBucket.model');
@@ -100,7 +101,6 @@ async function updateBoard(catIndex, answerIndex){
     {
         console.log(`Error retrieving board ::`, err);      
     }
-
 }
 
 async function checkTally(){
@@ -156,7 +156,6 @@ function addAnswer(userId, username, newAnswer){
 async function checkAnswers(){
     // Get current list of creatures
     const currentCreatures = await Chatter.find();                
-
 
     // Get current baseValue based on difficulty
     const difficulty = foundQuestionData._difficulty;

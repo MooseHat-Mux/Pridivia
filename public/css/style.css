@@ -339,6 +339,53 @@ h1{
     background: linear-gradient(30deg, #7b00ffc5, #ff0000cb);
 }
 
+.trivia-tally{
+    display: auto;
+    background-color: #314828;
+    width: 82%;
+}
+
+.trivia-tally h2{
+    font-size: 35px;
+    justify-self: center;
+}
+
+.trivia-tally .previous-questions{
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    justify-self: center;
+}
+
+.board-button-container{
+    display: flex;
+    justify-content: right;
+}
+
+.board-return-button{
+    background-color: #222;
+    color: #fff;
+    font-size: 10px;
+    font-family: "OpenDyslexic";
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    justify-self: center;
+}
+
+.tally-container{
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    font-size: 30px;
+    justify-content: center;
+}
+
+.trivia-tally .clan-tally{
+    background-color: #173222;
+    height: 100%;
+}
+
 @font-face{
     font-family: 'OpenDyslexic';
     src: url('../fonts/opendyslexic-0.92/OpenDyslexic-Regular.otf');

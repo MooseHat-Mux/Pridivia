@@ -47,6 +47,11 @@ exports.timer_set = async(req, res, next) =>{
         let timer_data = req.body;
         const timecheck = timer_data.timeStart;
         server.jeopargay_started = timecheck;
+
+        if(!timecheck){
+            server.updateBoard();
+            server.update_tally();
+        }
         console.log('Timer state ::', timerCheck.timeDone);
     }
     catch(err){
