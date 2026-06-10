@@ -10,6 +10,7 @@ const socket = io();
 let countdownInterval;
 var timerElement = document.getElementById("timer-display");
 var questionElement = document.getElementById("question-display");
+var pauseElement = document.getElementById("pause-button");
 var answers = document.getElementsByClassName("option");
 const answer_results = {};
 
@@ -138,15 +139,7 @@ async function StartTimer(){
 
     try{
         console.log('Initializing Start Timer Data');
-        // const requestBody = {
-        //     timeStart: true
-        // };
-        // const options = {
-        //     method: "POST",
-        //     body: JSON.stringify(requestBody)
-        // }
 
-        // fetch('/board/timer', options);
         socket.emit('timer_start', true)
     }catch(err){
         console.log('Error setting timer ::', err);

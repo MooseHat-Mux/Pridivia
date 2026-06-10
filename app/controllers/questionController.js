@@ -216,13 +216,7 @@ exports.create_chatters = async(req, res, next) =>{
 
 async function checkAnswers(currentAnswers){
     // Get current list of creatures
-    const currentCreatures = await Chatter.find();                
-
-    // Get current baseValue based on difficulty
-    const difficulty = foundQuestionData._difficulty;
-    difficulty++;
-    
-    const possibleWinnings = baseValue * difficulty;
+    const currentCreatures = await Chatter.find();
 
     // Update missing chatters from received answers
     const newCreatures = [];
@@ -271,6 +265,11 @@ async function calculateCurrentTally(updateCreatures, currentAnswers){
         _lycan: 0,
         _mortals: 0 
     };
+    
+    // Get current baseValue based on difficulty
+    const difficulty = foundQuestionData._difficulty;
+    difficulty++;
+    const possibleWinnings = baseValue * difficulty;
 
     const creatureCount = updateCreatures.length;
     for(let i = 0; i < creatureCount; i++)
@@ -281,23 +280,23 @@ async function calculateCurrentTally(updateCreatures, currentAnswers){
         {
             const thisClan = updateCreatures[i].clan;     
             if(updateCreatures[i]._answer === foundQuestionData._correctanswer){
-                currentTally[thisClan]++;
+                currentTally[thisClan] = currentTally[thisClan] + possibleWinnings;
             }
-            else currentTally[thisClan] --;
+            else currentTally[thisClan] = currentTally[thisClan] - possibleWinnings;
         }
     }
 
     const clanCount = currentTally.length;
     const totalTally = 0;
     for(var key in currentTally){
-        totalTally += currentTally[key];
+        totalTally += currentTally[key] * possibleWinnings;
     }
 
     for(var key in currentTally){
         if(key != "_id")
         {
-            var weightedTally = baseValue / currentTally[key];
-            var newTally = baseValue * weightedTally;
+            var weightedTally = possibleWinnings / currentTally[key];
+            var newTally = possibleWinnings * weightedTally;
 
             currentTally[key] = newTally;
         }
