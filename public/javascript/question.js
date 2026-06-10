@@ -35,6 +35,7 @@ socket.on("connect_error", (err) => {
 });
 
 socket.on('chatanswers', (data) => {
+    console.log(`Chat answers received ${data}`)
     currentAnswers = data;
 });
 

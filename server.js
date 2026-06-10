@@ -200,13 +200,9 @@ io.on('connection', (socket) =>{
 
     socket.on('answer_end',(end) => {
         jeopargay_started = false;
+        socket.broadcast.emit('chatanswers', currentAnswers);
         console.log(`answer_end called ${jeopargay_started} supposed to be ${end}`);
     });
-
-    if(jeopargay_started)
-    {
-        socket.broadcast.emit('chatanswers', currentAnswers);
-    }
 });
 
 chatserver.listen(port, () => {
