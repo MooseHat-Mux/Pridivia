@@ -42,8 +42,10 @@ exports.display_question = async(req, res, next) =>{
 
 exports.timer_end = async(req, res, next) =>{
     try{
+        let currentAnswers = JSON.parse(req.body);
         console.log(`Timer end called, check answers`);
-        
+        console.log(`${currentAnswers}`);
+
         await checkAnswers(currentAnswers);
     }
     catch(err){

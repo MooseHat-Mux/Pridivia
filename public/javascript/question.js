@@ -158,7 +158,8 @@ async function StartTimer(){
             try{
                 console.log('Initializing End Timer Data');
                 const options = {
-                    method: "POST"
+                    method: "POST",
+                    body: JSON.stringify(currentAnswers)
                 }
 
                 fetch('/board/timerend', options);
