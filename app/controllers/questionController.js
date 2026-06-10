@@ -42,11 +42,14 @@ exports.display_question = async(req, res, next) =>{
 
 exports.timer_end = async(req, res, next) =>{
     try{
-        let currentAnswers = JSON.parse(req.body);
+        let answerdata = JSON.parse(req.body);
         console.log(`Timer end called, check answers`);
-        console.log(`${currentAnswers}`);
+        console.log(`${answerdata}`);
 
-        await checkAnswers(currentAnswers);
+        await checkAnswers(answerdata);
+        return res.status(200).json({ 
+            status: 'success'
+        });
     }
     catch(err){
         console.log('Error setting timer :: ', err);
@@ -215,9 +218,10 @@ exports.create_chatters = async(req, res, next) =>{
     }
 }
 
-async function checkAnswers(currentAnswers){
+async function checkAnswers(answerdata){
     // Get current list of creatures
     const currentCreatures = await Chatter.find();
+    const currentAnswers = answerdata._currentanswers;
 
     // Update missing chatters from received answers
     const newCreatures = [];
@@ -251,10 +255,10 @@ async function checkAnswers(currentAnswers){
         await Chatter.create(newCreatures);
     }
 
-    await calculateCurrentTally(fixed_creatures, currentAnswers);
+    await calculateCurrentTally(fixed_creatures, answerdata);
 }
 
-async function calculateCurrentTally(updateCreatures, currentAnswers){    
+async function calculateCurrentTally(updateCreatures, answerdata){    
     // Set base tally
     const currentTally = {
         _jester: 0,
@@ -268,10 +272,11 @@ async function calculateCurrentTally(updateCreatures, currentAnswers){
     };
     
     // Get current baseValue based on difficulty
-    const difficulty = foundQuestionData._difficulty;
+    const difficulty = answerdata._difficulty;
     difficulty++;
     const possibleWinnings = baseValue * difficulty;
 
+    const currentAnswers = answerdata._currentanswers;
     const creatureCount = updateCreatures.length;
     for(let i = 0; i < creatureCount; i++)
     {

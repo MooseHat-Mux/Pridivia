@@ -156,10 +156,16 @@ async function StartTimer(){
             clearInterval(countdownInterval);
             timerElement.innerHTML = 'Womp Womp';
             try{
+                let difficulty =  sessionStorage.getItem('difficulty');
                 console.log('Initializing End Timer Data');
+                const answerdata = {
+                    _currentAnswers : currentAnswers,
+                    _difficulty: difficulty
+                };
+
                 const options = {
                     method: "POST",
-                    body: JSON.stringify(currentAnswers)
+                    body: JSON.stringify(answerdata)
                 }
 
                 fetch('/board/timerend', options);
