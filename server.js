@@ -28,7 +28,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
         console.log("Wow you hit a thing!!");
     }
 
-    console.log(`${command}`);
+    //console.log(`${command}`);
 
     if(jeopargay_started){
         if(command === "a"){
@@ -199,7 +199,7 @@ io.on('connection', (socket) =>{
     });
 
     socket.on('answer_end',(end) => {
-        //jeopargay_started = false;
+        jeopargay_started = false;
         console.log(`answer_end called ${jeopargay_started} supposed to be ${end}`);
     });
 

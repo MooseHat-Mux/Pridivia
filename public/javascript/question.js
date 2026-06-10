@@ -161,7 +161,8 @@ async function StartTimer(){
                     method: "POST"
                 }
 
-                fetch('/board/timerend', options);
+                await fetch('/board/timerend', options);
+                socket.emit('answer_end', false);
             }catch(err){
                  console.log('Error setting timer ::', err);
             }

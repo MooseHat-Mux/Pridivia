@@ -43,7 +43,6 @@ exports.display_question = async(req, res, next) =>{
 exports.timer_end = async(req, res, next) =>{
     try{
         console.log(`Timer end called, check answers`);
-        socket.emit('answer_end', false);
         
         await checkAnswers(currentAnswers);
     }
