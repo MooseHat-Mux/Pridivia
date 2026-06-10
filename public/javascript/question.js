@@ -3,6 +3,7 @@ var currentAnswers = [];
 let selectedAnswer = '';
 let correctAnswer = '';
 let foundQuestionData = {};
+const pause = false;
 const timeDone = false;
 const dailydouble = false;
 const baseValue = 100;
@@ -16,6 +17,10 @@ const answer_results = {};
 
 document.addEventListener("DOMContentLoaded", function(){
     startJeopargay();
+});
+
+pauseElement.addEventListener('click', ()=>{
+    pauseTimer();
 });
 
 socket.on("connect_error", (err) => {
@@ -133,7 +138,7 @@ function showAnswer(){
 async function StartTimer(){
     console.log('Timer started!');
     clearInterval(countdownInterval);
-    let remainingTime = 30;
+    let remainingTime = 45;
 
     timerElement.innerHTML = `Time Remaining : ${remainingTime}`;
 
@@ -146,35 +151,49 @@ async function StartTimer(){
     }
 
     countdownInterval = setInterval(() =>{
-        remainingTime--;
-
-        if(remainingTime >= 0)
+        if(!pause)
         {
-            timerElement.innerHTML = `Time Remaining : ${remainingTime}`;
-        }
-        else{
-            clearInterval(countdownInterval);
-            timerElement.innerHTML = 'Womp Womp';
-            try{
-                let difficulty =  sessionStorage.getItem('difficulty');
-                console.log('Initializing End Timer Data');
-                const answerdata = {
-                    _currentAnswers : currentAnswers,
-                    _difficulty: difficulty
-                };
+            remainingTime--;
 
-                const options = {
-                    method: "POST",
-                    body: JSON.stringify(answerdata)
+            if(remainingTime >= 0)
+            {
+                timerElement.innerHTML = `Time Remaining : ${remainingTime}`;
+            }
+            else{
+                clearInterval(countdownInterval);
+                timerElement.innerHTML = 'Womp Womp';
+                try{
+                    let difficulty =  sessionStorage.getItem('difficulty');
+                    console.log('Initializing End Timer Data');
+                    const answerdata = {
+                        _currentAnswers : currentAnswers,
+                        _difficulty: difficulty
+                    };
+
+                    const options = {
+                        method: "POST",
+                        body: JSON.stringify(answerdata)
+                    }
+
+                    fetch('/board/timerend', options);
+                    socket.emit('answer_end', false);
+                }catch(err){
+                        console.log('Error setting timer ::', err);
                 }
 
-                fetch('/board/timerend', options);
-                socket.emit('answer_end', false);
-            }catch(err){
-                 console.log('Error setting timer ::', err);
+                showAnswer();
             }
-
-            showAnswer();
-        }
+        }    
     }, 1000);
+}
+
+function pauseTimer(){
+    pause = !pause;
+
+    if(!pause){
+        socket.emit('answer_end', false);
+    }
+    else{
+        socket.emit('timer_start', true);
+    }
 }

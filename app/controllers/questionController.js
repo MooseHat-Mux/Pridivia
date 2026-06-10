@@ -44,7 +44,7 @@ exports.timer_end = async(req, res, next) =>{
     try{
         let answerdata = JSON.parse(req.body);
         console.log(`Timer end called, check answers`);
-        console.log(`${answerdata}`);
+        console.log(`${req.body}`);
 
         await checkAnswers(answerdata);
         return res.status(200).json({ 
