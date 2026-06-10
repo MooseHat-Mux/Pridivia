@@ -7,6 +7,10 @@ const chatterSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    _discordid:{
+        type: Number,
+        unique: true
+    },
     _username: {
         type: String,
         required: true,
@@ -14,11 +18,11 @@ const chatterSchema = new mongoose.Schema({
     },
     _clan: {
         type: String,
-        required: true      
+        default: 'mortal'    
     },
     _createdAt: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     }
 });
 

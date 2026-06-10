@@ -8,22 +8,30 @@
     </head>
     <body style="background-color:#3B6751";>
         <main>
-            <div id="trivia-container" class="trivia-container">
-                
-                <h1>JEOPARGAY</h1>
-                <div id="timer-display" class="timer">Time Remaining: 10 seconds</div>
-                <h2 id="question-display" class="question">Ass above ass below</h2>
-                <div class="options">
-                    <button class="option">Emerald Ipad</button>
-                    <button class="option">Emerald Ipad</button>
-                    <button class="option">Emerald Ipad</button>
-                    <button class="option">Emerald Ipad</button>
+            <div class="trivia-main">
+                <div class="question-left">
+                    <img class="left-trivia-image" src="../backgroundImages/951313ilsdl.png"></img>
                 </div>
-                <div><button id="pause-button" class="pause-trivia" style="float: left;">Pause!</button>
-                <a href="./"><button id="end-button" class="end-trivia" style="float: right">End</button></a></div>
-            </div>
+                <div id="trivia-container" class="trivia-container">        
+                    <h1>JEOPARGAY</h1>
+                    <div id="timer-display" class="timer">Time Remaining: 10 seconds</div>
+                    <h2 id="question-display" class="question">Ass above ass below</h2>
+                    <div class="options">
+                        <button class="option">Emerald Ipad</button>
+                        <button class="option">Emerald Ipad</button>
+                        <button class="option">Emerald Ipad</button>
+                        <button class="option">Emerald Ipad</button>
+                    </div>
+                    <div><button id="pause-button" class="pause-trivia" style="float: left;">Pause!</button>
+                    <a href="./"><button id="end-button" class="end-trivia" style="float: right">End</button></a></div>
+                </div>
+                <div class="question-right">
+                    <img class="right-trivia-image" src="../backgroundImages/951311ilsdl.png"></img>
+                </div>
+            </div>         
         </main>
 
+        <script src="/socket.io/socket.io.js"></script>
         <script src="../javascript/question.js"></script>
     </body>
 </html>

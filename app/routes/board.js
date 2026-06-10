@@ -13,6 +13,9 @@ router.get("/", board_controller.index);
 // Should return json data for board
 router.get("/currentboard", board_controller.board_data);
 
+// GET return json data for board
+router.get("/resetboard", board_controller.reset_board);
+
 // GET request for displaying question
 router.get('/question', question_controller.question_page);
 
@@ -32,18 +35,27 @@ router.post('/updatequestion', question_controller.update_questionbucket);
 router.post('/replacequestion', question_controller.replace_questionbucket);
 
 // POST for getting a question from the buckets
-router.post('/timer', question_controller.timer_set);
+router.post('/timerend', question_controller.timer_end);
+
+// GET request for tally page
+router.get('/tally', tally_controller.tally_page);
 
 // GET request for showing current tally
-router.get('/tally', tally_controller.tally_check);
+router.get('/tally/check', tally_controller.tally_check);
 
 // POST request for updating the tally
 router.post('/tally/update', tally_controller.tally_update);
+
+// POST request new tally
+router.post('/tally/new', tally_controller.tally_createnew);
 
 // GET request for showing chatter data
 router.get('/chatters', question_controller.show_chatters);
 
 // POST request for creating chatter data
 router.post('/chatter', question_controller.create_chatter);
+
+// POST request for creating chatter data
+router.post('/createchatters', question_controller.create_chatters);
 
 module.exports = router;
