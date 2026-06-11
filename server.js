@@ -106,11 +106,11 @@ async function updateBoard(catIndex, answerIndex){
 
 async function checkTally(){
     try{
-        const tallyResult = await Tally.findOne({_id : "Tally"});
+        const tallyResult = await Tally.findOne({_id : "tally"});
 
         if(!tallyResult){
             let newTally = new Tally({
-                _id: "Tally",
+                _id: "tally",
                 jester: 0,
                 dragon: 0,
                 vampire: 0,
@@ -148,11 +148,23 @@ async function checkTally(){
 
 function addAnswer(userId, username, newAnswer){
     console.log(`Answer added ${userId} ${username} ${newAnswer}`);
-    currentAnswers.push({
+    var chatanswer = {
         _userid: userId,
         _username: username,
         _answer: newAnswer
-    });
+    };
+
+    try{
+        socket.emit('chatanswer', chatanswer)
+    }catch(err){
+        console.log('Error adding answer ::', err);
+    }
+    
+    // currentAnswers.push({
+    //     _userid: userId,
+    //     _username: username,
+    //     _answer: newAnswer
+    // });
 }
 
 function addToClan(user, clan){
@@ -200,7 +212,7 @@ io.on('connection', (socket) =>{
 
     socket.on('answer_end',(end) => {
         jeopargay_started = false;
-        socket.broadcast.emit('chatanswers', currentAnswers);
+        currentAnswers = [];
         console.log(`answer_end called ${jeopargay_started} supposed to be ${end}`);
     });
 });

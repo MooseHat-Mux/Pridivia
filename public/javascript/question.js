@@ -34,6 +34,11 @@ socket.on("connect_error", (err) => {
   console.log(err.context);
 });
 
+socket.on('chatanswer', (data) => {
+    console.log(`New answer received ${data}`)
+    currentAnswers.push(data);
+});
+
 socket.on('chatanswers', (data) => {
     console.log(`Chat answers received ${data}`)
     currentAnswers = data;
@@ -178,6 +183,8 @@ async function StartTimer(){
 
                     fetch('/board/timerend', options);
                     socket.emit('answer_end', false);
+
+                    currentAnswers = [];
                 }catch(err){
                         console.log('Error setting timer ::', err);
                 }
