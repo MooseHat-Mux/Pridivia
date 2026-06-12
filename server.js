@@ -146,27 +146,6 @@ async function checkTally(){
     // }
 }
 
-function addAnswer(userId, username, newAnswer){
-    console.log(`Answer added ${userId} ${username} ${newAnswer}`);
-    var chatanswer = {
-        _userid: userId,
-        _username: username,
-        _answer: newAnswer
-    };
-
-    try{
-        socket.emit('chatanswer', chatanswer)
-    }catch(err){
-        console.log('Error adding answer ::', err);
-    }
-    
-    // currentAnswers.push({
-    //     _userid: userId,
-    //     _username: username,
-    //     _answer: newAnswer
-    // });
-}
-
 function addToClan(user, clan){
 
 }
@@ -225,6 +204,27 @@ chatserver.listen(port, () => {
 io.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
+
+function addAnswer(userId, username, newAnswer){
+    console.log(`Answer added ${userId} ${username} ${newAnswer}`);
+    var chatanswer = {
+        _userid: userId,
+        _username: username,
+        _answer: newAnswer
+    };
+
+    try{
+        io.emit('chatanswer', chatanswer)
+    }catch(err){
+        console.log('Error adding answer ::', err);
+    }
+
+    // currentAnswers.push({
+    //     _userid: userId,
+    //     _username: username,
+    //     _answer: newAnswer
+    // });
+}
 
 function handleError(err){
     console.log(`Database error ::`, err);      
