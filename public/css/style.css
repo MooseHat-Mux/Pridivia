@@ -458,10 +458,11 @@ main.hidden{
     height: 100%;
     bottom: 0;
     background-repeat: no-repeat;
-    z-index: 0;
+    z-index: 1;
     background-image: url("../backgroundImages/951277ilsdl.png");
     background-position: bottom;
     background-size: 30em auto;
+    pointer-events: none;
 }
 
 .right-trivia-image{
