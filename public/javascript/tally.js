@@ -8,7 +8,6 @@ const thrall_progress = document.getElementById("thrall");
 const lycan_progress = document.getElementById("lycan");
 const mortals_progress = document.getElementById("mortals");
 
-const currentTally = {};
 const creatureCount = 8;
 const currentMax = 200;
 const maxTiers = [
@@ -38,7 +37,7 @@ async function showTally(){
             return tallydisplay.json();
         }).then(data => {
             console.log('Data retrieved');
-            currentTally = data.data.currentTally;
+            var currentTally = data.data.currentTally;
             console.log(currentTally);
 
             for(var i = 0; i < maxTiers.length; i++)
@@ -53,14 +52,14 @@ async function showTally(){
                 }
             }
             
-            for(var creature in currentTally){
-                if(creature != "id"){
-                    if(currentTally[creature] < 0)
-                    {
-                        currentTally[creature] = 0;
-                    }
-                }
-            }
+            // for(var creature in currentTally){
+            //     if(creature != "id"){
+            //         if(currentTally[creature] < 0)
+            //         {
+            //             currentTally[creature] = 0;
+            //         }
+            //     }
+            // }
 
             jester_progress.style.height = currentTally["jester"] / currentMax + '%';
             dragon_progress.style.height = currentTally["dragon"] / currentMax + '%';
