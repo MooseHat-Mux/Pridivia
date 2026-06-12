@@ -48,7 +48,6 @@ async function showTally(){
                         if(currentTally[creature] >= maxTiers[i])
                         {
                             currentMax = maxTier[i];
-                            return;
                         }
                     }
                 }

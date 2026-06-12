@@ -95,7 +95,7 @@ async function startJeopargay(){
             let index = 0;
             for(let option of answers){
                 option.innerHTML = _answers[index];
-                if(optin.innerHTML === actualAnswer)
+                if(option.innerHTML === actualAnswer)
                 {
                     if(index === 0)
                     {
@@ -112,9 +112,9 @@ async function startJeopargay(){
                     }
                 }
                 answer_results[_answers[index]] = option;
-                option.addEventListener('click', () =>{
-                    selectedAnswer = _answers[index];
-                });
+                // option.addEventListener('click', () =>{
+                //     selectedAnswer = _answers[index];
+                // });
 
                 console.log(`Option ${index}: ${_answers[index]}`)
                 index++;
@@ -189,7 +189,8 @@ async function StartTimer(){
                     const answerdata = {
                         _currentanswers : currentAnswers,
                         _difficulty: difficulty,
-                        _correctanswer: correctAnswer
+                        _correctanswer: correctAnswer,
+                        _selectedanswer: selectedAnswer
                     };
 
                     const options = {

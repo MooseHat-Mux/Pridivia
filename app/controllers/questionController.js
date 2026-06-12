@@ -286,7 +286,8 @@ async function calculateCurrentTally(updateCreatures, answerdata){
         _lycan: 0,
         _mortals: 0 
     };
-    
+    const selectedanswer = answerdata._selectedanswer;
+
     // Get current baseValue based on difficulty
     const difficulty = answerdata._difficulty + 1;
     const possibleWinnings = baseValue * difficulty;
@@ -312,6 +313,14 @@ async function calculateCurrentTally(updateCreatures, answerdata){
             }
             else currentTally[thisClan] = currentTally[thisClan] - possibleWinnings;
         }
+    }
+
+    if(selectedanswer)
+    {
+        if(selectedanswer === answerdata._correctanswer){
+            currentTally._vampire = currentTally._vampire + possibleWinnings;
+        }
+        else currentTally._vampire = currentTally._vampire - possibleWinnings;
     }
 
     const clanCount = currentTally.length;
