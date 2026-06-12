@@ -32,7 +32,7 @@ async function showTally(){
     console.log('Show tally called');
 
     try{
-        await fetch('/board/tally/check', options)
+        await fetch('/board/tally/check')
         .then(tallydisplay => {
             console.log('Question Initialized');
             return tallydisplay.json();
