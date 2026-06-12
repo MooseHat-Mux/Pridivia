@@ -8,13 +8,10 @@ const chatterSchema = new mongoose.Schema({
         unique: true
     },
     _discordid:{
-        type: Number,
-        unique: true
+        type: Number
     },
     _username: {
-        type: String,
-        required: true,
-        unique: true
+        type: String
     },
     _clan: {
         type: String,

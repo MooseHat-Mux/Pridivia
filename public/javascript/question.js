@@ -6,7 +6,6 @@ let foundQuestionData = {};
 const pause = false;
 const timeDone = false;
 const dailydouble = false;
-const baseValue = 100;
 const socket = io();
 let countdownInterval;
 var timerElement = document.getElementById("timer-display");
@@ -84,8 +83,8 @@ async function startJeopargay(){
             console.log(foundQuestionData);
 
             questionElement.innerHTML = foundQuestionData._question;
-            correctAnswer = foundQuestionData._correctAnswer;
-            console.log(`Store correct answer::`, correctAnswer);
+            let actualAnswer = foundQuestionData._correctAnswer;
+            console.log(`Store correct answer::`, actualAnswer);
 
             var _answers = [];
             for(var answer in foundQuestionData._answers)
@@ -96,6 +95,22 @@ async function startJeopargay(){
             let index = 0;
             for(let option of answers){
                 option.innerHTML = _answers[index];
+                if(optin.innerHTML === actualAnswer)
+                {
+                    if(index === 0)
+                    {
+                        correctAnswer = "A";
+                    }
+                    else if (index === 1){
+                        correctAnswer = "B";
+                    }
+                    else if (index === 2){
+                        correctAnswer = "C";
+                    }
+                    else{
+                        correctAnswer = "D";
+                    }
+                }
                 answer_results[_answers[index]] = option;
                 option.addEventListener('click', () =>{
                     selectedAnswer = _answers[index];
@@ -172,8 +187,9 @@ async function StartTimer(){
                     let difficulty =  sessionStorage.getItem('difficulty');
                     console.log('Initializing End Timer Data');
                     const answerdata = {
-                        _currentAnswers : currentAnswers,
-                        _difficulty: difficulty
+                        _currentanswers : currentAnswers,
+                        _difficulty: difficulty,
+                        _correctanswer: correctAnswer
                     };
 
                     const options = {

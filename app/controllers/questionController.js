@@ -1,8 +1,10 @@
 const QuestionBucket = require("../models/QuestionBucket.model");
+const Tally = require("../models/Tally.model");
 const Chatter = require("../models/Chatter.model");
 const path = require("path");
 const mongoose = require('mongoose');
 const jeopargayuri = process.env.JEOPARGAYURI;
+const baseValue = 100;
 
 exports.question_page = async(req, res, next) =>{
     console.log('Get:', 'Question Page');
@@ -223,20 +225,34 @@ async function checkAnswers(answerdata){
     const currentCreatures = await Chatter.find();
     const currentAnswers = answerdata._currentanswers;
 
+    console.log(`current answer json :: ${JSON.stringify(answerdata)} :: ${JSON.stringify(currentAnswers)}`);
+
     // Update missing chatters from received answers
     const newCreatures = [];
 
-    const creature_usernames = currentCreatures.map(thiscreature => thiscreature._username);
-    const users_withoutids = currentCreatures.filter(newcreature => (currentAnswers.includes(newcreature._username) && !currentAnswers.includes(newcreature._userid)));
-    const correct_users = currentCreatures.filter(newcreature => (currentAnswers.includes(newcreature._username) && currentAnswers.includes(newcreature._userid)));
+    const users_withoutids = currentCreatures.filter(newcreature => 
+        currentAnswers.find(useranswer => (
+            useranswer._username === newcreature._username.toLowerCase() && 
+            useranswer._userid != newcreature._userid)));
+    console.log(`usernames no ids :: ${JSON.stringify(users_withoutids)}`);
+    //console.log(`creatures :: ${JSON.stringify(currentCreatures)}`);
+  
+    const correct_users = currentCreatures.filter((newcreature) => 
+        currentAnswers.find((answer_data) => newcreature._userid === parseInt(answer_data._userid)));
+    console.log(`Correct users :: ${JSON.stringify(correct_users)}`);
 
     var answerCount = users_withoutids.length;
-    for(var i; i < answerCount; i++){        
-        var possibleId = currentAnswers.find(creature => creature._username === users_withoutids[i]._username)._userid;
-        var thisClan = users_withoutids.find(creature => creature._username === users_withoutids[i]._username);
+    console.log(`usernames no ids count :: ${answerCount}`);
+
+    for(let i = 0; i < answerCount; i++){        
+        var possibleId = currentAnswers.find(creature => creature._username === users_withoutids[i]._username.toLowerCase())._userid;
+        console.log(`Possible Id :: ${possibleId}`);
+        var thisClan = users_withoutids[i]._clan;
+        console.log(`Possible Id :: ${thisClan}`);
         const chatterData = {
             _userid : possibleId,
             _username : users_withoutids[i]._username,
+            _discordid : users_withoutids[i]._discordid
         };
 
         if(thisClan){
@@ -245,22 +261,22 @@ async function checkAnswers(answerdata){
         else{
             chatterData._clan = "_mortals";
         }
+        
+        await Chatter.updateOne({ _userid : users_withoutids[i]._userid }, chatterData);
 
-        newCreatures.push(chatterData);
+        //newCreatures.push(chatterData);
     }
-    
+
+    //console.log(`New creatures :: ${JSON.stringify(newCreatures)}`);
+    //await Chatter.updateMany({}, { $set: newCreatures }, { updatePipeline : true });
     const fixed_creatures = newCreatures.concat(correct_users);
-
-    if(newCreatures.length > 0){
-        await Chatter.create(newCreatures);
-    }
 
     await calculateCurrentTally(fixed_creatures, answerdata);
 }
 
 async function calculateCurrentTally(updateCreatures, answerdata){    
     // Set base tally
-    const currentTally = {
+    let currentTally = {
         _jester: 0,
         _dragon: 0,
         _vampire: 0,
@@ -272,20 +288,26 @@ async function calculateCurrentTally(updateCreatures, answerdata){
     };
     
     // Get current baseValue based on difficulty
-    const difficulty = answerdata._difficulty;
-    difficulty++;
+    const difficulty = answerdata._difficulty + 1;
     const possibleWinnings = baseValue * difficulty;
+    console.log(`Possible winnings :: ${possibleWinnings}`);
 
     const currentAnswers = answerdata._currentanswers;
-    const creatureCount = updateCreatures.length;
+    const creatureCount = currentAnswers.length;
     for(let i = 0; i < creatureCount; i++)
     {
-        const foundUser = currentAnswers.find((userid) => _userid == updateCreatures[i]._username);
+        const foundUser = updateCreatures.find((creature) => parseInt(currentAnswers[i]._userid) === creature._userid);
+        console.log(`Found creature :: ${JSON.stringify(foundUser)}`);
 
         if(foundUser)
         {
-            const thisClan = updateCreatures[i].clan;     
-            if(updateCreatures[i]._answer === foundQuestionData._correctanswer){
+            const thisClan = foundUser._clan;
+            console.log(`Found clan :: ${thisClan}`);
+            console.log(`Clan type:: ${typeof thisClan}`);
+
+            console.log(`Answer comparisons :: ${currentAnswers[i]._answer} :: ${answerdata._correctanswer}`);
+            console.log(`Answer types :: ${typeof currentAnswers[i]._answer} :: ${typeof answerdata._correctanswer}`);
+            if(currentAnswers[i]._answer === answerdata._correctanswer){
                 currentTally[thisClan] = currentTally[thisClan] + possibleWinnings;
             }
             else currentTally[thisClan] = currentTally[thisClan] - possibleWinnings;
@@ -293,7 +315,7 @@ async function calculateCurrentTally(updateCreatures, answerdata){
     }
 
     const clanCount = currentTally.length;
-    const totalTally = 0;
+    var totalTally = 0;
     for(var key in currentTally){
         totalTally += currentTally[key] * possibleWinnings;
     }
@@ -301,38 +323,26 @@ async function calculateCurrentTally(updateCreatures, answerdata){
     for(var key in currentTally){
         if(key != "_id")
         {
-            var weightedTally = possibleWinnings / currentTally[key];
-            var newTally = possibleWinnings * weightedTally;
+            if(currentTally[key] != 0)
+            {
+                var weightedTally = possibleWinnings / currentTally[key];
+                var newTally = possibleWinnings * weightedTally;
 
-            currentTally[key] = newTally;
+                currentTally[key] = newTally;
+            }
         }
     }
-    
-    // Clear Answers
-    currentAnswers = {};
 
-    currentTally._tallyid = "tally";
+    console.log(`Current Tally ${JSON.stringify(currentTally)}`);
     await updateTallies(currentTally);
 }
 
 async function updateTallies(newTally){   
-    let tallyResult = await Tally.updateOne({ _tallyid : "tally" }, {$inc: req.body});                
+    let tallyResult = await Tally.updateOne({ _tallyid : "tally" }, {$inc: newTally});                
 
     if(tallyResult){
         console.log(`Found tallies`);
         console.log(tallyResult);
-
-        // const sumTally = sumObjectsByKey(tallyResult, newTally);
-        // console.log(`Summerized Tallies`);
-        // console.log(sumTally);
-        
-        // const oldResult = await client.db("creatures").collection("JeopargayData").updateOne({id: "OldTally"}, { $set: tallyResult});
-        // console.log(`Old tally result in database`);
-        // console.log(oldResult);
-        
-        // const newResult = await client.db("creatures").collection("JeopargayData").updateOne({id: "Tally"}, { $set: sumTally});
-        // console.log(`New tally result in database`);
-        // console.log(newResult);
     }
     else{
         console.log(`Unabled to retrieve tallies`);

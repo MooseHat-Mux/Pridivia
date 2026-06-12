@@ -22,7 +22,7 @@ const maxTiers = [
 ];
 
 document.addEventListener("DOMContentLoaded", function(){
-    await showTally();
+    showTally();
 });
 
 async function showTally(){
