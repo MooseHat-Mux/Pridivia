@@ -266,14 +266,19 @@ async function checkAnswers(answerdata){
             //     _username : currentAnswers[c]._username,
             //     _clan : "_mortals"
             // });
-            var newcreature = new Chatter({
-                _userid : answer_id,
-                _username : currentAnswers[c]._username,
-                _clan : "_mortals",
-                _discordid : answer_id
-            });
+            const duplicate = currentCreatures.some(thiscreature => thiscreature._username === parseInt(currentAnswers[c]._username));
 
-            await newcreature.save();
+            if(!duplicate)
+            {
+                var newcreature = new Chatter({
+                    _userid : answer_id,
+                    _username : currentAnswers[c]._username,
+                    _clan : "_mortals",
+                    _discordid : answer_id
+                });
+
+                await newcreature.save();
+            }
         }
     }
   

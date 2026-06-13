@@ -46,6 +46,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
     }
 
     if((flags.mod || flags.broadcaster) && command === "creature"){
+        addToClan(message);
         console.log(`${message} this is the fucking clan command I guess idk`);
     }
 }
@@ -146,8 +147,9 @@ async function checkTally(){
     // }
 }
 
-function addToClan(user, clan){
-
+async function addToClan(clanmessage){
+    const clanArray = clanmessage.split(" ");
+    await Chatter.findOneAndUpdate({ _username : clanArray[0].toLowerCase()}, {_clan : `_` + clanArray[1].toLowerCase()}, { new: true, upsert: true });
 }
 
 function sumObjectsByKey(...objs) {
