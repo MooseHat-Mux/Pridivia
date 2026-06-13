@@ -77,13 +77,13 @@ async function showTally(){
             console.log(`Current Max :: ${currentMax}`);
 
             jester_total.innerHTML = `${currentTally._jester}`;
-            dragon_total.innerHTML = currentTally["_dragon"];
-            vampire_total.innerHTML = currentTally["_vampire"];
-            warlock_total.innerHTML = currentTally["_warlock"];
-            gargoyle_total.innerHTML = currentTally["_gargoyle"];
-            thrall_total.innerHTML = currentTally["_thrall"];
-            lycan_total.innerHTML = currentTally["_lycan"];
-            mortals_total.innerHTML = currentTally["_mortals"];
+            dragon_total.innerHTML = currentTally["_dragon"].toFixed(2);
+            vampire_total.innerHTML = currentTally["_vampire"].toFixed(2);
+            warlock_total.innerHTML = currentTally["_warlock"].toFixed(2);
+            gargoyle_total.innerHTML = currentTally["_gargoyle"].toFixed(2);
+            thrall_total.innerHTML = currentTally["_thrall"].toFixed(2);
+            lycan_total.innerHTML = currentTally["_lycan"].toFixed(2);
+            mortals_total.innerHTML = currentTally["_mortals"].toFixed(2);
 
             jester_progress.style.height = currentTally["_jester"] / currentMax * 100 + '%';
             dragon_progress.style.height = currentTally["_dragon"] / currentMax * 100 + '%';
