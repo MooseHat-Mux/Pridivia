@@ -50,6 +50,7 @@ function setUpButton(cat, diff){
     console.log(`Setting category ${cat} at difficulty ${diff}`);
     sessionStorage.setItem('category', cat);
     sessionStorage.setItem('difficulty', diff);
+    window.location.href = "/board/question";
 }
 
 function initializeButtons(data){

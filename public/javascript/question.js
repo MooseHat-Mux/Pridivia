@@ -2,11 +2,11 @@
 var currentAnswers = [];
 let selectedAnswer = '';
 let correctAnswer = {
-    _answerindex = '',
-    _answertext = ''
+    _answerindex : '',
+    _answertext : ''
 };
 let foundQuestionData = {};
-const pause = false;
+var pause = false;
 const timeDone = false;
 const dailydouble = false;
 const socket = io();
@@ -49,9 +49,10 @@ socket.on('chatanswers', (data) => {
 
 async function InitializeAnswers(){
     console.log(`Answers initialized`);
-    for(const option in answers){
-        option.addEventListener('click', () =>{
-            selectedAnswer = answers[option].innerHTML;
+    for(let i = 0; i < answers.length; i++){
+        answers[i].addEventListener('click', () =>{
+            selectedAnswer = answers[i].innerHTML;
+            console.log(`Answer selected! :: ${selectedAnswer}`);
         });
     }
 }
@@ -136,7 +137,7 @@ async function startJeopargay(){
         // }
 
         console.log('Initialized Question');
-        
+        InitializeAnswers();
         StartTimer();
     }
     catch(err){

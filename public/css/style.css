@@ -267,6 +267,7 @@ main.hidden{
 .trivia-board .category1{
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: center;
     align-content: start;
     align-items: start;
     color: #000;
@@ -276,6 +277,9 @@ main.hidden{
 }
 
 .trivia-board .cat1square{
+    width: 60%;
+    justify-self: center;
+    align-content: center;
     padding: 30px;
     font-size: 30px;
     font-family: "Insula";
@@ -290,6 +294,7 @@ main.hidden{
 .trivia-board .category2{
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: center;
     align-content: start;
     align-items: start;
     color: #000;
@@ -300,6 +305,9 @@ main.hidden{
 
 .trivia-board .cat2square{
     display: table-cell;
+    justify-self: center;
+    align-content: center;
+    width: 60%;
     padding: 30px;
     font-size: 30px;
     font-family: "Insula";
@@ -314,6 +322,7 @@ main.hidden{
 .trivia-board .category3{
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: center;
     align-content: start;
     align-items: start;
     color: #000;
@@ -324,6 +333,9 @@ main.hidden{
 
 .trivia-board .cat3square{
     display: table-cell;
+    justify-self: center;
+    align-content: center;
+    width: 60%;
     padding: 30px;
     font-size: 30px;
     font-family: "Insula";
@@ -338,6 +350,7 @@ main.hidden{
 .trivia-board .category4{
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: center;
     align-content: start;
     align-items: start;
     color: #000;
@@ -348,6 +361,9 @@ main.hidden{
 
 .trivia-board .cat4square{
     display: table-cell;
+    justify-self: center;
+    align-content: center;
+    width: 60%;
     padding: 30px;
     font-size: 30px;
     font-family: "Insula";
@@ -362,6 +378,7 @@ main.hidden{
 .trivia-board .category5{
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: center;
     align-content: start;
     align-items: start;
     color: #000;
@@ -372,6 +389,9 @@ main.hidden{
 
 .trivia-board .cat5square{
     display: table-cell;
+    justify-self: center;
+    align-content: center;
+    width: 60%;
     padding: 30px;
     font-size: 30px;
     font-family: "Insula";
@@ -386,6 +406,7 @@ main.hidden{
 .trivia-board .category6{
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: center;
     align-content: start;
     align-items: start;
     color: #000;
@@ -396,6 +417,9 @@ main.hidden{
 
 .trivia-board .cat6square{
     display: table-cell;
+    justify-self: center;
+    align-content: center;
+    width: 60%;
     padding: 30px;
     font-size: 30px;
     font-family: "Insula";
