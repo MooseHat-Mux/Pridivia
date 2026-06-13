@@ -1,7 +1,10 @@
 //const streamuri = process.env.HERGRACE;
 var currentAnswers = [];
 let selectedAnswer = '';
-let correctAnswer = '';
+let correctAnswer = {
+    _answerindex = '',
+    _answertext = ''
+};
 let foundQuestionData = {};
 const pause = false;
 const timeDone = false;
@@ -99,17 +102,19 @@ async function startJeopargay(){
                 {
                     if(index === 0)
                     {
-                        correctAnswer = "A";
+                        correctAnswer._answerindex = "A";
                     }
                     else if (index === 1){
-                        correctAnswer = "B";
+                        correctAnswer._answerindex = "B";
                     }
                     else if (index === 2){
-                        correctAnswer = "C";
+                        correctAnswer._answerindex = "C";
                     }
                     else{
-                        correctAnswer = "D";
+                        correctAnswer._answerindex = "D";
                     }
+
+                    correctAnswer._answertext = option.innerHTML;
                 }
                 answer_results[_answers[index]] = option;
                 // option.addEventListener('click', () =>{
@@ -147,7 +152,7 @@ function showAnswer(){
         option.disabled = true;
 
         console.log(`This answer ${option.innerHTML}`);
-        if(option.innerHTML === correctAnswer){
+        if(option.innerHTML === correctAnswer._answertext){
             option.classList.add('correct');
         }
         else{
@@ -189,7 +194,7 @@ async function StartTimer(){
                     const answerdata = {
                         _currentanswers : currentAnswers,
                         _difficulty: difficulty,
-                        _correctanswer: correctAnswer,
+                        _correctanswer: correctAnswer._answerindex,
                         _selectedanswer: selectedAnswer
                     };
 
