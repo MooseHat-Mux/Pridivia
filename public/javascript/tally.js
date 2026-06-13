@@ -9,7 +9,7 @@ const lycan_progress = document.getElementById("lycan");
 const mortals_progress = document.getElementById("mortals");
 
 const creatureCount = 8;
-const currentMax = 200;
+var currentMax = 200;
 const maxTiers = [
     300,
     400,
@@ -17,7 +17,11 @@ const maxTiers = [
     1000,
     1500,
     2500,
-    3500
+    3500,
+    5000,
+    7500,
+    10000,
+    20000
 ];
 
 document.addEventListener("DOMContentLoaded", function(){
