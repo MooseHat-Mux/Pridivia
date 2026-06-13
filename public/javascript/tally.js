@@ -8,6 +8,15 @@ const thrall_progress = document.getElementById("thrall");
 const lycan_progress = document.getElementById("lycan");
 const mortals_progress = document.getElementById("mortals");
 
+const jester_total = document.getElementById("jester-total");
+const dragon_total = document.getElementById("dragon-total");
+const vampire_total = document.getElementById("vampire-total");
+const warlock_total = document.getElementById("warlock-total");
+const gargoyle_total = document.getElementById("gargoyle-total");
+const thrall_total = document.getElementById("thrall-total");
+const lycan_total = document.getElementById("lycan-total");
+const mortals_total = document.getElementById("mortals-total");
+
 const creatureCount = 8;
 var currentMax = 200;
 const maxTiers = [
@@ -65,23 +74,25 @@ async function showTally(){
             //     }
             // }
 
-            jester_progress.innerHTML = currentTally["jester"];
-            dragon_progress.innerHTML = currentTally["dragon"];
-            vampire_progress.innerHTML = currentTally["vampire"];
-            warlock_progress.innerHTML = currentTally["warlock"];
-            gargoyle_progress.innerHTML = currentTally["gargoyle"];
-            thrall_progress.innerHTML = currentTally["thrall"];
-            lycan_progress.innerHTML = currentTally["lycan"];
-            mortals_progress.innerHTML = currentTally["mortals"];
+            console.log(`Current Max :: ${currentMax}`);
 
-            jester_progress.style.height = currentTally["jester"] / currentMax + '%';
-            dragon_progress.style.height = currentTally["dragon"] / currentMax + '%';
-            vampire_progress.style.height = currentTally["vampire"] / currentMax + '%';
-            warlock_progress.style.height = currentTally["warlock"] / currentMax + '%';
-            gargoyle_progress.style.height = currentTally["gargoyle"] / currentMax + '%';
-            thrall_progress.style.height = currentTally["thrall"] / currentMax + '%';
-            lycan_progress.style.height = currentTally["lycan"] / currentMax + '%';
-            mortals_progress.style.height = currentTally["mortals"] / currentMax + '%';
+            jester_total.innerHTML = `${currentTally._jester}`;
+            dragon_total.innerHTML = currentTally["_dragon"];
+            vampire_total.innerHTML = currentTally["_vampire"];
+            warlock_total.innerHTML = currentTally["_warlock"];
+            gargoyle_total.innerHTML = currentTally["_gargoyle"];
+            thrall_total.innerHTML = currentTally["_thrall"];
+            lycan_total.innerHTML = currentTally["_lycan"];
+            mortals_total.innerHTML = currentTally["_mortals"];
+
+            jester_progress.style.height = currentTally["_jester"] / currentMax * 100 + '%';
+            dragon_progress.style.height = currentTally["_dragon"] / currentMax * 100 + '%';
+            vampire_progress.style.height = currentTally["_vampire"] / currentMax * 100 + '%';
+            warlock_progress.style.height = currentTally["_warlock"] / currentMax * 100 + '%';
+            gargoyle_progress.style.height = currentTally["_gargoyle"] / currentMax * 100 + '%';
+            thrall_progress.style.height = currentTally["_thrall"] / currentMax * 100 + '%';
+            lycan_progress.style.height = currentTally["_lycan"] / currentMax * 100 + '%';
+            mortals_progress.style.height = currentTally["_mortals"] / currentMax * 100 + '%';
         });
     }
     catch(err){

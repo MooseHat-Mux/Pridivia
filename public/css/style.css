@@ -527,48 +527,64 @@ main.hidden{
     height: 0.1%;
     width: 50%;
     background-color: #771bce;
+    box-shadow: 0 10px 40px -10px #771bce;
+    transition: all 2s ease;
 }
 
 .clan-tally .dragon-progress{
     height: 0.1%;
     width: 50%;
     background-color: #cec329;
+    box-shadow: 0 10px 40px -10px #cec329;
+    transition: all 2s ease;
 }
 
 .clan-tally .vampire-progress{
     height: 0.1%;
     width: 50%;
     background-color: #df1919;
+    box-shadow: 0 10px 40px -10px #df1919;
+    transition: all 2s ease;
 }
 
 .clan-tally .warlock-progress{
     height: 0.1%;
     width: 50%;
     background-color: #297ece;
+    box-shadow: 0 10px 40px -10px #297ece;
+    transition: all 2s ease;
 }
 
 .clan-tally .gargoyle-progress{
     height: 0.1%;
     width: 50%;
     background-color: #1cc947;
+    box-shadow: 0 10px 40px -10px #1cc947;
+    transition: all 2s ease;
 }
 
 .clan-tally .thrall-progress{
     height: 0.1%;
     width: 50%;
     background-color: #ce29b8;
+    box-shadow: 0 10px 40px -10px #ce29b8;
+    transition: all 2s ease;
 }
 
 .clan-tally .lycan-progress{
     height: 0.1%;
     width: 50%;
+    box-shadow: 0 10px 40px -10px #ca7d18;
     background-color: #ca7d18;
+    transition: all 2s ease;
 }
 
 .clan-tally .mortals-progress{
     height: 0.1%;
     width: 50%;
+    box-shadow: 0 10px 40px -10px #56787e;
     background-color: #56787e;
+    transition: all 2s ease;
 }
 
 @font-face{
