@@ -37,7 +37,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
         else if(command === "b"){
             addAnswer(extra.userId, extra.username, "B");
         }
-        else if(command === "d"){
+        else if(command === "c"){
             addAnswer(extra.userId, extra.username, "C");
         }
         else if(command === "d"){
