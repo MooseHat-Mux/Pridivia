@@ -226,50 +226,100 @@ async function checkAnswers(answerdata){
     const currentAnswers = answerdata._currentanswers;
 
     console.log(`current answer json :: ${JSON.stringify(answerdata)} :: ${JSON.stringify(currentAnswers)}`);
+    console.log(`current answer count :: ${currentAnswers.length}`);
+    console.log(`current total creature count :: ${currentCreatures.length}`);
 
     // Update missing chatters from received answers
     const newCreatures = [];
 
-    const users_withoutids = currentCreatures.filter(newcreature => 
-        currentAnswers.find(useranswer => (
+    const users_withoutids = currentCreatures.filter(newcreature =>
+    {
+        var answer = currentAnswers.find(useranswer => (
             useranswer._username === newcreature._username.toLowerCase() && 
-            useranswer._userid != newcreature._userid)));
+            useranswer._userid != newcreature._userid));
+        return answer;
+    });
+
     console.log(`usernames no ids :: ${JSON.stringify(users_withoutids)}`);
     //console.log(`creatures :: ${JSON.stringify(currentCreatures)}`);
-  
-    const correct_users = currentCreatures.filter((newcreature) => 
-        currentAnswers.find((answer_data) => newcreature._userid === parseInt(answer_data._userid)));
-    console.log(`Correct users :: ${JSON.stringify(correct_users)}`);
 
-    var answerCount = users_withoutids.length;
-    console.log(`usernames no ids count :: ${answerCount}`);
-
-    for(let i = 0; i < answerCount; i++){        
-        var possibleId = currentAnswers.find(creature => creature._username === users_withoutids[i]._username.toLowerCase())._userid;
-        console.log(`Possible Id :: ${possibleId}`);
-        var thisClan = users_withoutids[i]._clan;
-        console.log(`Possible Id :: ${thisClan}`);
-        const chatterData = {
-            _userid : possibleId,
-            _username : users_withoutids[i]._username,
-            _discordid : users_withoutids[i]._discordid
-        };
-
-        if(thisClan){
-            chatterData._clan = thisClan;
-        }
-        else{
-            chatterData._clan = "_mortals";
-        }
-        
-        await Chatter.updateOne({ _userid : users_withoutids[i]._userid }, chatterData);
-
-        //newCreatures.push(chatterData);
+    const correct_users = [];
+    for(let c = 0; c < currentAnswers.length; c++)
+    {
+        currentCreatures.some(thiscreature => {
+            if(thiscreature._userid === parseInt(currentAnswers[c]._userid))
+            {
+                correct_users.push(thiscreature);
+            }
+        });
     }
 
-    //console.log(`New creatures :: ${JSON.stringify(newCreatures)}`);
+    for(let c = 0; c < currentAnswers.length; c++)
+    {
+        const answer_id = parseInt(currentAnswers[c]._userid);
+        const found = users_withoutids.some(noid => noid._userid === answer_id);
+        const correct = correct_users.some(creature => creature._userid === answer_id);
+        console.log(`answer user id :: ${answer_id}`);
+        if(!found && !correct){
+            // users_withoutids.push({
+            //     _userid : answer_id,
+            //     _username : currentAnswers[c]._username,
+            //     _clan : "_mortals"
+            // });
+            var newcreature = new Chatter({
+                _userid : answer_id,
+                _username : currentAnswers[c]._username,
+                _clan : "_mortals",
+                _discordid : answer_id
+            });
+
+            await newcreature.save();
+        }
+    }
+  
+    // const correct_users = currentCreatures.filter((oldcreature) => 
+    //     currentAnswers.find((answer_data) => oldcreature._userid === parseInt(answer_data._userid)));
+    console.log(`Correct users :: ${JSON.stringify(correct_users)}`);
+    console.log(`Correct user Count :: ${correct_users.length}`);
+
+    var id_less_Count = users_withoutids.length;
+    console.log(`usernames no ids count :: ${id_less_Count}`);
+
+    for(let i = 0; i < id_less_Count; i++){        
+        var possibleUser = currentAnswers.find(creature => creature._username === users_withoutids[i]._username.toLowerCase());
+
+        if(possibleUser)
+        {
+            var possibleId = parseInt(possibleUser._userid);
+            console.log(`Possible Id :: ${possibleId}`);
+            var thisClan = users_withoutids[i]._clan;
+            console.log(`Possible Clan :: ${thisClan}`);
+            const chatterData = {
+                _userid : possibleId,
+                _username : users_withoutids[i]._username,
+                _discordid : users_withoutids[i]._discordid
+            };
+
+            if(thisClan){
+                chatterData._clan = thisClan;
+            }
+            else{
+                chatterData._clan = "_mortals";
+            }
+            
+            await Chatter.updateOne({ _userid : users_withoutids[i]._userid }, chatterData);
+
+            newCreatures.push(chatterData);
+        }
+        else{
+            console.log(`Missing user :: ${users_withoutids[i]._username.toLowerCase()}`);
+        }
+    }
+
     //await Chatter.updateMany({}, { $set: newCreatures }, { updatePipeline : true });
     const fixed_creatures = newCreatures.concat(correct_users);
+    console.log(`All creatures :: ${JSON.stringify(fixed_creatures)}`);
+    console.log(`All creatures Count :: ${fixed_creatures.length}`);
 
     await calculateCurrentTally(fixed_creatures, answerdata);
 }
@@ -298,7 +348,7 @@ async function calculateCurrentTally(updateCreatures, answerdata){
     for(let i = 0; i < creatureCount; i++)
     {
         const foundUser = updateCreatures.find((creature) => parseInt(currentAnswers[i]._userid) === creature._userid);
-        console.log(`Found creature :: ${JSON.stringify(foundUser)}`);
+        console.log(`Found creature :: ${JSON.stringify(foundUser)} :: ${currentAnswers[i]._userid}`);
 
         if(foundUser)
         {
