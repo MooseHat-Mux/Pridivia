@@ -291,7 +291,8 @@ async function checkAnswers(answerdata){
     console.log(`usernames no ids count :: ${id_less_Count}`);
 
     for(let i = 0; i < id_less_Count; i++){        
-        var possibleUser = currentAnswers.find(creature => creature._username === users_withoutids[i]._username.toLowerCase());
+        var possibleUser = currentAnswers.find(creature => creature._username === users_withoutids[i]._username.toLowerCase() 
+        && creature._userid === users_withoutids[i]._userid);
 
         if(possibleUser)
         {
@@ -312,7 +313,7 @@ async function checkAnswers(answerdata){
                 chatterData._clan = "_mortals";
             }
             
-            await Chatter.updateOne({ _userid : users_withoutids[i]._userid }, chatterData);
+            await Chatter.findOneAndReplace({ _userid : users_withoutids[i]._userid }, chatterData, { upsert: true });
 
             newCreatures.push(chatterData);
         }
@@ -341,10 +342,23 @@ async function calculateCurrentTally(updateCreatures, answerdata){
         _lycan: 0,
         _mortals: 0 
     };
+
+    let participateTally = {
+        _jester: 0,
+        _dragon: 0,
+        _vampire: 0,
+        _gargoyle: 0,
+        _warlock: 0,
+        _thrall: 0,
+        _lycan: 0,
+        _mortals: 0 
+    };
+
     const selectedanswer = answerdata._selectedanswer;
 
     // Get current baseValue based on difficulty
-    const difficulty = answerdata._difficulty + 1;
+    const difficulty = parseInt(answerdata._difficulty) + 1;
+    console.log(`Difficulty ${difficulty}`);
     const possibleWinnings = baseValue * difficulty;
     console.log(`Possible winnings :: ${possibleWinnings}`);
 
@@ -364,32 +378,40 @@ async function calculateCurrentTally(updateCreatures, answerdata){
             console.log(`Answer comparisons :: ${currentAnswers[i]._answer} :: ${answerdata._correctanswer}`);
             console.log(`Answer types :: ${typeof currentAnswers[i]._answer} :: ${typeof answerdata._correctanswer}`);
             if(currentAnswers[i]._answer === answerdata._correctanswer){
-                currentTally[thisClan] = currentTally[thisClan] + possibleWinnings;
+                currentTally[thisClan]++;
             }
-            else currentTally[thisClan] = currentTally[thisClan] - possibleWinnings;
+            else currentTally[thisClan]--;
+
+            participateTally[thisClan]++;
+            console.log(`This total :: ${currentTally[thisClan]}`);
+            console.log(`Participant total :: ${participateTally[thisClan]}`);
         }
     }
 
     if(selectedanswer)
     {
         if(selectedanswer === answerdata._correctanswer){
-            currentTally._vampire = currentTally._vampire + possibleWinnings;
+            currentTally._vampire++;
         }
-        else currentTally._vampire = currentTally._vampire - possibleWinnings;
+        else currentTally._vampire--;
     }
 
-    const clanCount = currentTally.length;
+    const clanCount = 8;
     var totalTally = 0;
-    for(var key in currentTally){
-        totalTally += currentTally[key] * possibleWinnings;
+    for(var key in participateTally){
+        totalTally += participateTally[key];
     }
+    console.log(`Totals :: ${totalTally} ${clanCount}`);
 
+    var averageTally = totalTally / clanCount;
+    console.log(`Average :: ${averageTally}`);
     for(var key in currentTally){
         if(key != "_id")
         {
             if(currentTally[key] != 0)
             {
-                var weightedTally = possibleWinnings / currentTally[key];
+                var weightedTally = currentTally[key] / averageTally;
+                console.log(`Weight :: ${weightedTally}`);
                 var newTally = possibleWinnings * weightedTally;
 
                 currentTally[key] = newTally;
