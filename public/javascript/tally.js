@@ -46,7 +46,7 @@ async function showTally(){
                     if(creature != "id"){
                         if(currentTally[creature] >= maxTiers[i])
                         {
-                            currentMax = maxTier[i];
+                            currentMax = maxTiers[i];
                         }
                     }
                 }
@@ -60,6 +60,15 @@ async function showTally(){
             //         }
             //     }
             // }
+
+            jester_progress.innerHTML = currentTally["jester"];
+            dragon_progress.innerHTML = currentTally["dragon"];
+            vampire_progress.innerHTML = currentTally["vampire"];
+            warlock_progress.innerHTML = currentTally["warlock"];
+            gargoyle_progress.innerHTML = currentTally["gargoyle"];
+            thrall_progress.innerHTML = currentTally["thrall"];
+            lycan_progress.innerHTML = currentTally["lycan"];
+            mortals_progress.innerHTML = currentTally["mortals"];
 
             jester_progress.style.height = currentTally["jester"] / currentMax + '%';
             dragon_progress.style.height = currentTally["dragon"] / currentMax + '%';

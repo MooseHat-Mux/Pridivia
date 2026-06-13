@@ -517,6 +517,12 @@ main.hidden{
     align-items: center;
 }
 
+.trivia-tally .clan-total{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
 .clan-tally .jester-progress{
     height: 0.1%;
     width: 50%;
@@ -524,43 +530,43 @@ main.hidden{
 }
 
 .clan-tally .dragon-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #cec329;
 }
 
 .clan-tally .vampire-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #df1919;
 }
 
 .clan-tally .warlock-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #297ece;
 }
 
 .clan-tally .gargoyle-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #1cc947;
 }
 
 .clan-tally .thrall-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #ce29b8;
 }
 
 .clan-tally .lycan-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #ca7d18;
 }
 
 .clan-tally .mortals-progress{
-    height: 1%;
+    height: 0.1%;
     width: 50%;
     background-color: #56787e;
 }
