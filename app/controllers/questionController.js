@@ -266,7 +266,7 @@ async function checkAnswers(answerdata){
             //     _username : currentAnswers[c]._username,
             //     _clan : "_mortals"
             // });
-            const duplicate = currentCreatures.some(thiscreature => thiscreature._username === currentAnswers[c]._username && thiscreature_userid === answer_id);
+            const duplicate = currentCreatures.some(thiscreature => thiscreature._username === currentAnswers[c]._username && thiscreature._userid === answer_id);
 
             if(!duplicate)
             {
