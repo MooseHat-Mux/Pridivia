@@ -166,8 +166,8 @@ exports.show_chatters = async(req, res, next) =>{
 exports.create_chatters = async(req, res, next) =>{
     try{
         console.log('Get:', 'New Chatter Data');
-        let chatterBody = JSON.parse(req.body);
-        console.log(chatterBody);
+        console.log('Get:', `${req.body}`);
+        let chatterBody = req.body;
 
         const chatterArray = [];
 
@@ -176,18 +176,18 @@ exports.create_chatters = async(req, res, next) =>{
             console.log(chatterBody[i]);
             var creature = chatterBody[i].Creature;
 
-            if(creature && i){
+            if(creature){
                  let newchatter = {
-                    _userid : i,
+                    _userid : i + Math.random(),
                     _clan : "_" + creature.toLowerCase(),
                  };
 
                  if(chatterBody[i].twitchuser){
-                    var twitch_username = chatterBody[i].twitchuser;
+                    var twitch_username = chatterBody[i].twitchuser.toLowerCase();
                     newchatter._username = twitch_username;
                 }
                 else if(chatterBody[i].discorduser){
-                    var discord_username = chatterBody[i].discorduser;
+                    var discord_username = chatterBody[i].discorduser.toLowerCase();
                     newchatter._username = discord_username;
                 }
 
@@ -266,7 +266,7 @@ async function checkAnswers(answerdata){
             //     _username : currentAnswers[c]._username,
             //     _clan : "_mortals"
             // });
-            const duplicate = currentCreatures.some(thiscreature => thiscreature._username === currentAnswers[c]._username);
+            const duplicate = currentCreatures.some(thiscreature => thiscreature._username === currentAnswers[c]._username && thiscreature_userid === answer_id);
 
             if(!duplicate)
             {
