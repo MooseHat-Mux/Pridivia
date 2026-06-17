@@ -55,40 +55,41 @@ ComfyJS.Init(streamuri);
 mongoose.connection.once('open', () =>{
     console.log('Connected to Mongodb');
 
-    var answers = {
-        q1: true,
-        q2: true,
-        q3: true,
-        q4: true,
-        q5: true
-    };
+    // var answers = {
+    //     q1: true,
+    //     q2: true,
+    //     q3: true,
+    //     q4: true,
+    //     q5: true
+    // };
 
-    var baseBoard = {
-        _boardId: "board",
-        _cat1 : answers,
-        _cat2 : answers,
-        _cat3 : answers,
-        _cat4 : answers,
-        _cat5 : answers,
-        _cat6 : answers};
+    // var baseBoard = {
+    //     _boardId: "board",
+    //     _cat1 : answers,
+    //     _cat2 : answers,
+    //     _cat3 : answers,
+    //     _cat4 : answers,
+    //     _cat5 : answers,
+    //     _cat6 : answers};
 
-    var boardQuery = { _boardId : "board"},
-        update = baseBoard,
-        options = { upsert : true, returnDocument: 'after'};
+    // var boardQuery = { _boardId : "board"},
+    //     update = baseBoard,
+    //     options = { upsert : true, returnDocument: 'after'};
         
-    mongoose.connection.useDb(jeopargayuri);
-    const boardResult = Board.findOneAndUpdate(boardQuery, update, options).then(
-        console.log(`Initiated database Board`)
-    ).catch(function(err) {
-        console.log(`Error initializing board ::`, err);      
-    });
+    // mongoose.connection.useDb(jeopargayuri);
+    // const boardResult = Board.findOneAndUpdate(boardQuery, update, options).then(
+    //     console.log(`Initiated database Board`)
+    // ).catch(function(err) {
+    //     console.log(`Error initializing board ::`, err);      
+    // });
 
-    console.log(boardResult);
+    // console.log(boardResult);
 })
 
 async function updateBoard(catIndex, answerIndex){
     mongoose.connection.useDb(jeopargayuri);
-    
+    console.log(`Update Board on server called`);
+
     var boardQuery = { _boardId : "board"},
         options = { returnDocument: 'after'};
 

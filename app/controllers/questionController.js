@@ -396,39 +396,34 @@ async function calculateCurrentTally(updateCreatures, answerdata){
         else currentTally._vampire--;
     }
 
-    var clanCount = 0;
-    var totalTally = 0;
-    for(var key in participateTally){
-        totalTally += participateTally[key];
-    }
+    // var clanCount = 0;
+    // var totalTally = 0;
+    // for(var key in participateTally){
+    //     totalTally += participateTally[key];
+    // }
     
+    // for(var key in currentTally){
+    //     if(key != "_id")
+    //     {
+    //         if(currentTally[key] != 0)
+    //         {
+    //             clanCount++;
+    //         }
+    //     }
+    // }
+
+    // console.log(`Totals :: ${totalTally} :: ${clanCount}`);
+
     for(var key in currentTally){
         if(key != "_id")
         {
             if(currentTally[key] != 0)
             {
-                clanCount++;
-            }
-        }
-    }
+                var weightedTally = currentTally[key] / participateTally[key];
+                console.log(`Weight :: ${weightedTally}`);
+                var newTally = possibleWinnings * weightedTally;
 
-    console.log(`Totals :: ${totalTally} :: ${clanCount}`);
-
-    if(clanCount > 0)
-    {
-        var averageTally = totalTally / clanCount;
-        console.log(`Average :: ${averageTally}`);
-        for(var key in currentTally){
-            if(key != "_id")
-            {
-                if(currentTally[key] != 0)
-                {
-                    var weightedTally = currentTally[key] / participateTally[key];
-                    console.log(`Weight :: ${weightedTally}`);
-                    var newTally = possibleWinnings * weightedTally;
-
-                    currentTally[key] = newTally;
-                }
+                currentTally[key] = newTally;
             }
         }
     }
