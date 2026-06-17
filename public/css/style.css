@@ -542,9 +542,9 @@ main.hidden{
 }
 
 .trivia-tally .clan-total{
-    display: flex;
-    justify-content: start;
-    align-items: center;
+    position: absolute;
+    margin: 0;
+    top: 50%;
 }
 
 .clan-tally .jester-progress{
