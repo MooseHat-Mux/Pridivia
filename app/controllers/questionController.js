@@ -423,7 +423,7 @@ async function calculateCurrentTally(updateCreatures, answerdata){
             {
                 if(currentTally[key] != 0)
                 {
-                    var weightedTally = currentTally[key] / averageTally;
+                    var weightedTally = currentTally[key] / participateTally[key];
                     console.log(`Weight :: ${weightedTally}`);
                     var newTally = possibleWinnings * weightedTally;
 
